@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -27,6 +28,9 @@ public class Classification {
 
         Duration dur = new Duration();
         dur.getDurations();
+
+        Probability prob = new Probability();
+        prob.getProbability();
 
         HashSet<String> resursai = res.getResources();
 
@@ -84,7 +88,7 @@ public class Classification {
             }
         }
         //System.out.println(sb.toString());
-        System.out.println("\nResursai ir resursu kiekis: \n"+similarRes);
+        System.out.println("\nResursai ir resursu kiekis: \n" + similarRes);
 
 
     }
@@ -134,13 +138,18 @@ class Resources {
 
 class Duration {
 
+    public static int selected1;
+    public static int selected2;
+
+
+    public static ArrayList<String> eventName = new ArrayList<>();
+    public static ArrayList<String> time = new ArrayList<>();
+    public static ArrayList<String> status = new ArrayList<>();
+    public static ArrayList<Integer> minutes = new ArrayList<>();
+
     public static ArrayList<String> getDurations() throws ParseException {
 
-        ArrayList<String> eventName = new ArrayList<>();
-        ArrayList<String> time = new ArrayList<>();
-        ArrayList<String> status = new ArrayList<>();
-        ArrayList<Integer> minutes = new ArrayList<>();
-
+        Scanner input = new Scanner(System.in);
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = null;
@@ -160,6 +169,7 @@ class Duration {
 
         HashMap<String, Integer> veikliuTrukmiuSumos = new HashMap<>(); //veiklu trukmiu sumos
         HashMap<String, Integer> veikluVyksmuKiekiai = new HashMap<>(); //veiklu kiekiai
+        ArrayList<String> uniqueEvents = new ArrayList<>();
 
 
         NodeList nodeList = document.getElementsByTagName("trace");
@@ -175,7 +185,6 @@ class Duration {
             NodeList stringList = element.getElementsByTagName("string");
 
             NodeList dateList = element.getElementsByTagName("date");
-            System.out.println("Trace list dydis: "+nodeList.getLength());
 
 
             //--- Get all events names ---//
@@ -183,6 +192,17 @@ class Duration {
             for (int x = 1, size = stringList.getLength(); x < size; x++) {
                 if (stringList.item(x).getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
                     eventName.add(stringList.item(x).getAttributes().getNamedItem("value").getNodeValue());
+                }
+            }
+
+            //--- Gaunamos unikalios veiklos ---//
+
+            for (int i = 0; i < eventName.size(); i++) {
+
+
+                String ivykisI = eventName.get(i); //gauname i-taji ivykio pavadinima
+                if (!uniqueEvents.contains(ivykisI)) {
+                    uniqueEvents.add(ivykisI);
                 }
             }
 
@@ -246,8 +266,8 @@ class Duration {
                         }
 
 
-                        System.out.println(eventName.get(i));
-                        System.out.println(duration);
+//                        System.out.println(eventName.get(i));
+//                        System.out.println(duration);
 
 //                    System.out.println(k);
 //                    System.out.println(j);
@@ -262,6 +282,43 @@ class Duration {
 
             }
         }
+
+        //--- Gauname unikalius ivykius ---//
+
+
+
+        //---//
+
+        //--- Ivesti pradine veikla ---//
+
+        System.out.println("Visi ivykiai: " + eventName);
+
+        System.out.println("Unikalus ivikiai: " + uniqueEvents);
+
+        System.out.println("Iveskite pradine veikla (ivesti skaiciu):\n");
+
+        for (int i = 0; i < uniqueEvents.size(); i++) {
+
+            System.out.println(i + 1 + " - " + uniqueEvents.get(i));
+        }
+
+        selected1 = input.nextInt();
+
+        //---//
+
+        // --- Ivesti kita veikla ---//
+
+        System.out.println("Iveskite sekancia veikla, kurios skaiciuosime tikimybe ivykti (ivesti skaiciu):\n");
+
+        for (int i = 0; i < uniqueEvents.size(); i++) {
+
+            System.out.println(i + 1 + " - " + uniqueEvents.get(i));//
+        }
+
+        selected2 = input.nextInt();
+
+        //---//
+
         // baigiasi trace ciklai
 
         HashMap<String, Integer> veikluVidutinesTrukmes = new HashMap<>();
@@ -271,7 +328,79 @@ class Duration {
             String ivykioVardas = ivykiuVardai.next();
             veikluVidutinesTrukmes.put(ivykioVardas, veikliuTrukmiuSumos.get(ivykioVardas) / veikluVyksmuKiekiai.get(ivykioVardas) * 2);
         }
-        System.out.println("Vidutines veiklų trukmes: \n"+veikluVidutinesTrukmes);
+        System.out.println("Vidutines veiklų trukmes: \n" + veikluVidutinesTrukmes);
         return eventName;
     }
+
+
 }
+
+class Probability {
+
+
+    public static ArrayList<String> eventName = new ArrayList<>();
+    public static ArrayList<String> status = new ArrayList<>();
+
+    public static ArrayList<Integer> getProbability() throws ParseException {
+
+
+        Duration duration = new Duration();
+        int selected1 = duration.selected1;
+        int selected2 = duration.selected2;
+
+        Scanner input = new Scanner(System.in);
+        ArrayList<Integer> prob = new ArrayList<>();
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document document = null;
+        try {
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\repairExample.xes"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        NodeList nodeList = document.getElementsByTagName("trace");
+        int traceNumber = nodeList.getLength();
+
+        for (int k = 0; k < nodeList.getLength(); k++) {
+            Element element = (Element) nodeList.item(k);
+            NodeList stringList = element.getElementsByTagName("string");
+
+            for (int x = 1, size = stringList.getLength(); x < size; x++) {
+                if (stringList.item(x).getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+                    eventName.add(stringList.item(x).getAttributes().getNamedItem("value").getNodeValue());
+                }
+            }
+
+            for (int x = 0, size = stringList.getLength(); x < size; x++) {
+                if (stringList.item(x).getAttributes().getNamedItem("key").getNodeValue().contains("lifecycle:transition")) {
+                    status.add(stringList.item(x).getAttributes().getNamedItem("value").getNodeValue());
+                }
+            }
+
+            String event1 = eventName.get(selected1-1);
+            String event2 = eventName.get(selected2-1);
+
+
+            for (int i = 0; i < eventName.size(); i++) {
+
+                
+
+            }
+
+
+        }
+
+        return prob;
+    }
+
+}
+
