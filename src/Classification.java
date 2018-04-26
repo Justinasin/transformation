@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
+import static java.lang.System.in;
 import static javax.swing.UIManager.get;
 
 public class Classification {
@@ -138,8 +139,17 @@ class Resources {
 
 class Duration {
 
+    public static int choice;
     public static int selected1;
     public static int selected2;
+    public static int selected3;
+    public static int selected4;
+    public static int selected5;
+    public static String event1;
+    public static String event2;
+    public static String event3;
+    public static String event4;
+    public static String event5;
 
 
     public static ArrayList<String> eventName = new ArrayList<>();
@@ -149,7 +159,8 @@ class Duration {
 
     public static ArrayList<String> getDurations() throws ParseException {
 
-        Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(in);
+
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = null;
@@ -286,8 +297,8 @@ class Duration {
         //--- Gauname unikalius ivykius ---//
 
 
-
         //---//
+
 
         //--- Ivesti pradine veikla ---//
 
@@ -306,16 +317,112 @@ class Duration {
 
         //---//
 
-        // --- Ivesti kita veikla ---//
+        System.out.println("Kiek ivykiu iseina is pasirinkimo mazgo (2,3,4)?\n ");
 
-        System.out.println("Iveskite sekancia veikla, kurios skaiciuosime tikimybe ivykti (ivesti skaiciu):\n");
+        choice = input.nextInt();
 
-        for (int i = 0; i < uniqueEvents.size(); i++) {
+        if (choice == 2) {
 
-            System.out.println(i + 1 + " - " + uniqueEvents.get(i));//
+            System.out.println("Iveskite " + (choice - 1) + "-osios veiklos pavadinima, kurios skaiciuosime tikimybini ivykti (ivesti skaiciu):\n");
+
+            for (int j = 0; j < uniqueEvents.size(); j++) {
+
+                System.out.println(j + 1 + " - " + uniqueEvents.get(j));//
+            }
+
+            selected2 = input.nextInt();
+
+            System.out.println("Iveskite " + choice + "-osios veiklos pavadinima, kurios skaiciuosime tikimybini ivykti (ivesti skaiciu):\n");
+
+            for (int j = 0; j < uniqueEvents.size(); j++) {
+
+                System.out.println(j + 1 + " - " + uniqueEvents.get(j));//
+            }
+
+            selected3 = input.nextInt();
+
+            event1 = uniqueEvents.get(selected1 - 1);
+            event2 = uniqueEvents.get(selected2 - 1);
+            event3 = uniqueEvents.get(selected3 - 1);
+
+        } else if (choice == 3) {
+
+            System.out.println("Iveskite " + (choice - 2) + "-osios veiklos pavadinima, kurios skaiciuosime tikimybini ivykti (ivesti skaiciu):\n");
+
+            for (int j = 0; j < uniqueEvents.size(); j++) {
+
+                System.out.println(j + 1 + " - " + uniqueEvents.get(j));//
+            }
+
+            selected2 = input.nextInt();
+
+            System.out.println("Iveskite " + (choice - 1) + "-osios veiklos pavadinima, kurios skaiciuosime tikimybini ivykti (ivesti skaiciu):\n");
+
+            for (int j = 0; j < uniqueEvents.size(); j++) {
+
+                System.out.println(j + 1 + " - " + uniqueEvents.get(j));//
+            }
+
+            selected3 = input.nextInt();
+
+            System.out.println("Iveskite " + (choice) + "-osios veiklos pavadinima, kurios skaiciuosime tikimybini ivykti (ivesti skaiciu):\n");
+
+            for (int j = 0; j < uniqueEvents.size(); j++) {
+
+                System.out.println(j + 1 + " - " + uniqueEvents.get(j));//
+            }
+
+            selected4 = input.nextInt();
+
+            event1 = uniqueEvents.get(selected1 - 1);
+            event2 = uniqueEvents.get(selected2 - 1);
+            event3 = uniqueEvents.get(selected3 - 1);
+            event4 = uniqueEvents.get(selected4 - 1);
+        } else if (choice == 4) {
+
+            System.out.println("Iveskite " + (choice - 3) + "-osios veiklos pavadinima, kurios skaiciuosime tikimybini ivykti (ivesti skaiciu):\n");
+
+            for (int j = 0; j < uniqueEvents.size(); j++) {
+
+                System.out.println(j + 1 + " - " + uniqueEvents.get(j));//
+            }
+
+            selected2 = input.nextInt();
+
+            System.out.println("Iveskite " + (choice - 2) + "-osios veiklos pavadinima, kurios skaiciuosime tikimybini ivykti (ivesti skaiciu):\n");
+
+            for (int j = 0; j < uniqueEvents.size(); j++) {
+
+                System.out.println(j + 1 + " - " + uniqueEvents.get(j));//
+            }
+
+            selected3 = input.nextInt();
+
+            System.out.println("Iveskite " + (choice - 1) + "-osios veiklos pavadinima, kurios skaiciuosime tikimybini ivykti (ivesti skaiciu):\n");
+
+            for (int j = 0; j < uniqueEvents.size(); j++) {
+
+                System.out.println(j + 1 + " - " + uniqueEvents.get(j));//
+            }
+
+            selected4 = input.nextInt();
+
+            System.out.println("Iveskite " + (choice) + "-osios veiklos pavadinima, kurios skaiciuosime tikimybini ivykti (ivesti skaiciu):\n");
+
+            for (int j = 0; j < uniqueEvents.size(); j++) {
+
+                System.out.println(j + 1 + " - " + uniqueEvents.get(j));//
+            }
+
+            selected5 = input.nextInt();
+
+            event1 = uniqueEvents.get(selected1 - 1);
+            event2 = uniqueEvents.get(selected2 - 1);
+            event3 = uniqueEvents.get(selected3 - 1);
+            event4 = uniqueEvents.get(selected4 - 1);
+            event5 = uniqueEvents.get(selected5 - 1);
         }
 
-        selected2 = input.nextInt();
 
         //---//
 
@@ -345,10 +452,13 @@ class Probability {
 
 
         Duration duration = new Duration();
-        int selected1 = duration.selected1;
-        int selected2 = duration.selected2;
+        int choice = duration.choice;
+        String selected1 = duration.event1;
+        String selected2 = duration.event2;
+        String selected3 = duration.event3;
+        String selected4 = duration.event4;
+        String selected5 = duration.event5;
 
-        Scanner input = new Scanner(System.in);
         ArrayList<Integer> prob = new ArrayList<>();
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -369,8 +479,14 @@ class Probability {
         }
         NodeList nodeList = document.getElementsByTagName("trace");
         int traceNumber = nodeList.getLength();
+        int tracecounter = 0;
+        int event1Counter = 0;
+        int event2Counter = 0;
+        int event3Counter = 0;
+        int event4Counter = 0;
 
         for (int k = 0; k < nodeList.getLength(); k++) {
+            eventName.clear();
             Element element = (Element) nodeList.item(k);
             NodeList stringList = element.getElementsByTagName("string");
 
@@ -386,18 +502,149 @@ class Probability {
                 }
             }
 
-            String event1 = eventName.get(selected1-1);
-            String event2 = eventName.get(selected2-1);
 
-
+            traceCounter:
             for (int i = 0; i < eventName.size(); i++) {
 
-                
+                for (int j = i + 1; j < eventName.size(); j++) {
 
+                    if (choice == 2) {
+
+                        if (eventName.get(i).contains(selected1) && (eventName.get(j).contains(selected2) || eventName.get(j).contains(selected3))) {
+                            tracecounter++;
+                            break traceCounter;
+                        }
+                    }
+
+                    if (choice == 3) {
+
+                        if (eventName.get(i).contains(selected1) && (eventName.get(j).contains(selected2) || eventName.get(j).contains(selected3) || eventName.get(j).contains(selected4))) {
+                            tracecounter++;
+                            break traceCounter;
+                        }
+                    }
+
+                    if (choice == 4) {
+
+                        if (eventName.get(i).contains(selected1) && (eventName.get(j).contains(selected2) || eventName.get(j).contains(selected3) || eventName.get(j).contains(selected4) || eventName.get(j).contains(selected5))) {
+                            tracecounter++;
+                            break traceCounter;
+                        }
+                    }
+
+                }
+            }
+
+            relationCounter:
+            for (int i = 0; i < eventName.size(); i++) {
+
+                for (int j = i + 1; j < i + 5; j++) {
+
+                    if (choice == 2) {
+
+                        if (eventName.get(i).contains(selected1) && eventName.get(j).contains(selected2)) {
+                            event1Counter++;
+                            break relationCounter;
+                        }
+
+                        if (eventName.get(i).contains(selected1) && eventName.get(j).contains(selected3)) {
+                            event2Counter++;
+                            break relationCounter;
+                        }
+                    }
+
+                    if (choice == 3) {
+
+                        if (eventName.get(i).contains(selected1) && eventName.get(j).contains(selected2)) {
+                            event1Counter++;
+                            break relationCounter;
+                        }
+
+                        if (eventName.get(i).contains(selected1) && eventName.get(j).contains(selected3)) {
+                            event2Counter++;
+                            break relationCounter;
+                        }
+
+                        if (eventName.get(i).contains(selected1) && eventName.get(j).contains(selected4)) {
+                            event3Counter++;
+                            break relationCounter;
+                        }
+                    }
+
+                    if (choice == 4) {
+
+                        if (eventName.get(i).contains(selected1) && eventName.get(j).contains(selected2)) {
+                            event1Counter++;
+                            break relationCounter;
+                        }
+
+                        if (eventName.get(i).contains(selected1) && eventName.get(j).contains(selected3)) {
+                            event2Counter++;
+                            break relationCounter;
+                        }
+
+                        if (eventName.get(i).contains(selected1) && eventName.get(j).contains(selected4)) {
+                            event3Counter++;
+                            break relationCounter;
+                        }
+
+                        if (eventName.get(i).contains(selected1) && eventName.get(j).contains(selected5)) {
+                            event4Counter++;
+                            break relationCounter;
+                        }
+                    }
+                }
             }
 
 
         }
+
+        if (choice == 2) {
+
+            float probability1 =((float) event1Counter)/tracecounter*100;
+            float probability2 =((float) event2Counter)/tracecounter*100;
+
+            System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected2 + " =  " + event1Counter);
+            System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected3 + " =  " + event2Counter);
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected2 + " =  " + String.format("%.2f",probability1)+"%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected3 + " =  " + String.format("%.2f",probability2)+"%");
+        }
+
+        if (choice == 3) {
+
+            float probability1 =((float) event1Counter)/tracecounter*100;
+            float probability2 =((float) event2Counter)/tracecounter*100;
+            float probability3 =((float) event3Counter)/tracecounter*100;
+
+            System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected2 + " =  " + event1Counter);
+            System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected3 + " =  " + event2Counter);
+            System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected4 + " =  " + event3Counter);
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected2 + " =  " + String.format("%.2f",probability1)+"%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected3 + " =  " + String.format("%.2f",probability2)+"%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected4 + " =  " + String.format("%.2f",probability3)+"%");
+        }
+
+        if (choice == 4) {
+
+            float probability1 =((float) event1Counter)/tracecounter*100;
+            float probability2 =((float) event2Counter)/tracecounter*100;
+            float probability3 =((float) event3Counter)/tracecounter*100;
+            float probability4 =((float) event4Counter)/tracecounter*100;
+
+            System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected2 + " =  " + event1Counter);
+            System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected3 + " =  " + event2Counter);
+            System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected4 + " =  " + event3Counter);
+            System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected5 + " =  " + event4Counter);
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected2 + " =  " + String.format("%.2f",probability1)+"%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected3 + " =  " + String.format("%.2f",probability2)+"%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected4 + " =  " + String.format("%.2f",probability3)+"%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected5 + " =  " + String.format("%.2f",probability4)+"%");
+        }
+
+
+        System.out.println("Is viso trace: " + tracecounter);
+        System.out.println("Trace skaicius pagal COUNT TRACE: " + traceNumber);
+
 
         return prob;
     }

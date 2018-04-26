@@ -18,8 +18,8 @@
       <file leaf-file-name="Classification.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Classification.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="394" column="16" lean-forward="true" selection-start-line="394" selection-start-column="16" selection-end-line="394" selection-end-column="16" />
+            <state relative-caret-position="-327">
+              <caret line="608" column="140" selection-start-line="608" selection-start-column="140" selection-end-line="608" selection-end-column="140" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -45,6 +45,7 @@
       <find>string</find>
       <find>neteisin</find>
       <find>netei</find>
+      <find>choice</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -71,6 +72,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -96,9 +100,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -201,7 +202,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -212,7 +212,7 @@
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50073206" side_tool="true" weight="0.32750398" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3290938" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49926794" visible="true" weight="0.29570746" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49926794" visible="true" weight="1.0" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -236,12 +236,12 @@
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info active="true" anchor="bottom" id="Run" order="6" visible="true" weight="0.3290938" />
       <window_info anchor="right" id="Theme Preview" order="2" />
-      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.24963397" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="5" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="6" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="10" />
+      <window_info anchor="bottom" id="Version Control" order="2" show_stripe_button="false" />
       <window_info id="Image Layers" order="0" />
       <window_info id="Designer" order="1" />
       <window_info id="UI Designer" order="2" />
@@ -251,7 +251,7 @@
       <window_info anchor="bottom" id="Terminal" order="0" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="2" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info id="Capture Tool" order="3" />
       <window_info anchor="bottom" id="Message" order="4" />
       <window_info anchor="bottom" id="Messages" order="3" />
@@ -271,10 +271,28 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="78" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Classification.java</url>
+          <line>603</line>
+          <properties />
+          <option name="timeStamp" value="86" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="87" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/Classification.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6698">
+          <caret line="394" lean-forward="true" selection-start-line="394" selection-end-line="394" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Classification.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -434,13 +452,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ArrayObject.java" />
     <entry file="file://$PROJECT_DIR$/src/List.java" />
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_161/src.zip!/java/util/ArrayList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="656" selection-start-line="656" selection-end-line="656" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_161/src.zip!/java/util/function/Function.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -464,10 +475,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_161/src.zip!/java/util/ArrayList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="432" selection-start-line="432" selection-end-line="433" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Classification.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="394" column="16" lean-forward="true" selection-start-line="394" selection-start-column="16" selection-end-line="394" selection-end-column="16" />
+        <state relative-caret-position="-327">
+          <caret line="608" column="140" selection-start-line="608" selection-start-column="140" selection-end-line="608" selection-end-column="140" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
