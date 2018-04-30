@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -17,7 +16,6 @@ import org.xml.sax.SAXException;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import static java.lang.System.in;
-import static javax.swing.UIManager.get;
 
 public class Classification {
 
@@ -601,44 +599,44 @@ class Probability {
 
         if (choice == 2) {
 
-            float probability1 =((float) event1Counter)/tracecounter*100;
-            float probability2 =((float) event2Counter)/tracecounter*100;
+            float probability1 = ((float) event1Counter) / tracecounter * 100;
+            float probability2 = ((float) event2Counter) / tracecounter * 100;
 
             System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected2 + " =  " + event1Counter);
             System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected3 + " =  " + event2Counter);
-            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected2 + " =  " + String.format("%.2f",probability1)+"%");
-            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected3 + " =  " + String.format("%.2f",probability2)+"%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected2 + " =  " + String.format("%.2f", probability1) + "%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected3 + " =  " + String.format("%.2f", probability2) + "%");
         }
 
         if (choice == 3) {
 
-            float probability1 =((float) event1Counter)/tracecounter*100;
-            float probability2 =((float) event2Counter)/tracecounter*100;
-            float probability3 =((float) event3Counter)/tracecounter*100;
+            float probability1 = ((float) event1Counter) / tracecounter * 100;
+            float probability2 = ((float) event2Counter) / tracecounter * 100;
+            float probability3 = ((float) event3Counter) / tracecounter * 100;
 
             System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected2 + " =  " + event1Counter);
             System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected3 + " =  " + event2Counter);
             System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected4 + " =  " + event3Counter);
-            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected2 + " =  " + String.format("%.2f",probability1)+"%");
-            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected3 + " =  " + String.format("%.2f",probability2)+"%");
-            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected4 + " =  " + String.format("%.2f",probability3)+"%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected2 + " =  " + String.format("%.2f", probability1) + "%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected3 + " =  " + String.format("%.2f", probability2) + "%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected4 + " =  " + String.format("%.2f", probability3) + "%");
         }
 
         if (choice == 4) {
 
-            float probability1 =((float) event1Counter)/tracecounter*100;
-            float probability2 =((float) event2Counter)/tracecounter*100;
-            float probability3 =((float) event3Counter)/tracecounter*100;
-            float probability4 =((float) event4Counter)/tracecounter*100;
+            float probability1 = ((float) event1Counter) / tracecounter * 100;
+            float probability2 = ((float) event2Counter) / tracecounter * 100;
+            float probability3 = ((float) event3Counter) / tracecounter * 100;
+            float probability4 = ((float) event4Counter) / tracecounter * 100;
 
             System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected2 + " =  " + event1Counter);
             System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected3 + " =  " + event2Counter);
             System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected4 + " =  " + event3Counter);
             System.out.println("Seku skaicius tarp veiklu: " + selected1 + " - " + selected5 + " =  " + event4Counter);
-            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected2 + " =  " + String.format("%.2f",probability1)+"%");
-            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected3 + " =  " + String.format("%.2f",probability2)+"%");
-            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected4 + " =  " + String.format("%.2f",probability3)+"%");
-            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected5 + " =  " + String.format("%.2f",probability4)+"%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected2 + " =  " + String.format("%.2f", probability1) + "%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected3 + " =  " + String.format("%.2f", probability2) + "%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected4 + " =  " + String.format("%.2f", probability3) + "%");
+            System.out.println("Tikimybe vykti veiklu sekai: " + selected1 + " - " + selected5 + " =  " + String.format("%.2f", probability4) + "%");
         }
 
 
