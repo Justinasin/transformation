@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xs:schema [
+        <!ELEMENT xs:schema (xs:element)*>
+        <!ATTLIST xs:schema
+                xmlns:xs CDATA #REQUIRED
+                elementFormDefault CDATA #REQUIRED
+                attributeFormDefault CDATA #REQUIRED>
+        <!ELEMENT xs:element (xs:complexType)*>
+        <!ATTLIST xs:element
+                maxOccurs CDATA #IMPLIED
+                name CDATA #REQUIRED>
+        <!ELEMENT xs:complexType (xs:sequence|xs:attribute)*>
+        <!ELEMENT xs:sequence (xs:element)*>
+        <!ELEMENT xs:attribute (#PCDATA)>
+        <!ATTLIST xs:attribute
+                name CDATA #REQUIRED
+                type CDATA #REQUIRED>
+        ]>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+    <!-- XML Schema Generated from XML Document on Wed Feb 28 2018 11:25:47 GMT+0200 (FLE Standard Time) -->
+    <!-- with XmlGrid.net Free Online Service http://xmlgrid.net -->
+    <xs:element name="ns1:BPSimData">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ns1:Scenario">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="ns1:ScenarioParameters">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="ns1:Start">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="ns1:DateTimeParameter">
+                                                        <xs:complexType>
+                                                            <xs:attribute name="value" type="xs:string"></xs:attribute>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="ns1:Duration">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="ns1:DurationParameter">
+                                                        <xs:complexType>
+                                                            <xs:attribute name="value" type="xs:string"></xs:attribute>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="ns1:PropertyParameters"></xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="baseTimeUnit" type="xs:string"></xs:attribute>
+                                    <xs:attribute name="baseCurrencyUnit" type="xs:string"></xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="ns1:ElementParameters" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="ns1:ResourceParameters">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="ns1:Quantity">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="ns1:NumericParameter">
+                                                                    <xs:complexType>
+                                                                        <xs:attribute name="value"
+                                                                                      type="xs:int"></xs:attribute>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="ns1:PropertyParameters"></xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="elementRef" type="xs:string"></xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:string"></xs:attribute>
+                        <xs:attribute name="name" type="xs:string"></xs:attribute>
+                        <xs:attribute name="description" type="xs:string"></xs:attribute>
+                        <xs:attribute name="author" type="xs:string"></xs:attribute>
+                        <xs:attribute name="version" type="xs:int"></xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="xmlns:ns1" type="xs:string"></xs:attribute>
+            <xs:attribute name="simulationLevel" type="xs:string"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

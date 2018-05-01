@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+         <!-- XML Schema Generated from XML Document on Tue May 01 2018 11:53:57 GMT+0300 (FLE Daylight Time) -->
+         <!-- with XmlGrid.net Free Online Service http://xmlgrid.net -->
+         <xs:element name="xs:schema">
+               <xs:complexType>
+                     <xs:sequence>
+                           <xs:element name="xs:element">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="xs:complexType">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xs:sequence">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xs:element">
+                                                                                       <xs:complexType>
+                                                                                             <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                                                                             <xs:attribute name="type" type="xs:string"></xs:attribute>
+                                                                                       </xs:complexType>
+                                                                                 </xs:element>
+                                                                           </xs:sequence>
+                                                                           <xs:attribute name="maxOccurs" type="xs:string"></xs:attribute>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="xs:complexType" maxOccurs="unbounded">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="xs:sequence">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xs:element" maxOccurs="unbounded">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xs:complexType">
+                                                                                       <xs:complexType>
+                                                                                             <xs:sequence>
+                                                                                                   <xs:element name="xs:complexContent">
+                                                                                                         <xs:complexType>
+                                                                                                               <xs:sequence>
+                                                                                                                     <xs:element name="xs:extension">
+                                                                                                                           <xs:complexType>
+                                                                                                                                 <xs:attribute name="base" type="xs:string"></xs:attribute>
+                                                                                                                           </xs:complexType>
+                                                                                                                     </xs:element>
+                                                                                                               </xs:sequence>
+                                                                                                         </xs:complexType>
+                                                                                                   </xs:element>
+                                                                                             </xs:sequence>
+                                                                                       </xs:complexType>
+                                                                                 </xs:element>
+                                                                           </xs:sequence>
+                                                                           <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                                                           <xs:attribute name="minOccurs" type="xs:int"></xs:attribute>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                         <xs:attribute name="minOccurs" type="xs:int"></xs:attribute>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="xs:attribute" maxOccurs="unbounded">
+                                                   <xs:complexType>
+                                                         <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                                         <xs:attribute name="type" type="xs:string"></xs:attribute>
+                                                         <xs:attribute name="use" type="xs:string"></xs:attribute>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="xs:element">
+                                 <xs:complexType>
+                                       <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                       <xs:attribute name="type" type="xs:string"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="xs:complexType">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="xs:attribute" maxOccurs="unbounded">
+                                                   <xs:complexType>
+                                                         <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                                         <xs:attribute name="type" type="xs:string"></xs:attribute>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="xs:element" maxOccurs="unbounded">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="xs:complexType">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xs:complexContent">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xs:extension">
+                                                                                       <xs:complexType>
+                                                                                             <xs:sequence>
+                                                                                                   <xs:element name="xs:sequence">
+                                                                                                         <xs:complexType>
+                                                                                                               <xs:sequence>
+                                                                                                                     <xs:element name="xs:annotation">
+                                                                                                                           <xs:complexType>
+                                                                                                                                 <xs:sequence>
+                                                                                                                                       <xs:element name="xs:documentation" type="xs:string"></xs:element>
+                                                                                                                                 </xs:sequence>
+                                                                                                                           </xs:complexType>
+                                                                                                                     </xs:element>
+                                                                                                                     <xs:element name="xs:element">
+                                                                                                                           <xs:complexType>
+                                                                                                                                 <xs:attribute name="ref" type="xs:string"></xs:attribute>
+                                                                                                                           </xs:complexType>
+                                                                                                                     </xs:element>
+                                                                                                               </xs:sequence>
+                                                                                                               <xs:attribute name="maxOccurs" type="xs:string"></xs:attribute>
+                                                                                                         </xs:complexType>
+                                                                                                   </xs:element>
+                                                                                             </xs:sequence>
+                                                                                             <xs:attribute name="base" type="xs:string"></xs:attribute>
+                                                                                       </xs:complexType>
+                                                                                 </xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                       <xs:attribute name="substitutionGroup" type="xs:string"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="xs:complexType">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="xs:complexContent">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xs:extension">
+                                                                     <xs:complexType>
+                                                                           <xs:attribute name="base" type="xs:string"></xs:attribute>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="xs:element" maxOccurs="unbounded">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="xs:complexType">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xs:complexContent">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xs:extension">
+                                                                                       <xs:complexType>
+                                                                                             <xs:sequence>
+                                                                                                   <xs:element name="xs:attribute">
+                                                                                                         <xs:complexType>
+                                                                                                               <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                                                                                               <xs:attribute name="type" type="xs:string"></xs:attribute>
+                                                                                                         </xs:complexType>
+                                                                                                   </xs:element>
+                                                                                             </xs:sequence>
+                                                                                             <xs:attribute name="base" type="xs:string"></xs:attribute>
+                                                                                       </xs:complexType>
+                                                                                 </xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                       <xs:attribute name="substitutionGroup" type="xs:string"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="xs:complexType">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="xs:complexContent">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xs:extension">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xs:attribute" maxOccurs="unbounded">
+                                                                                       <xs:complexType>
+                                                                                             <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                                                                             <xs:attribute name="type" type="xs:string"></xs:attribute>
+                                                                                       </xs:complexType>
+                                                                                 </xs:element>
+                                                                           </xs:sequence>
+                                                                           <xs:attribute name="base" type="xs:string"></xs:attribute>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="xs:element" maxOccurs="unbounded">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="xs:complexType">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xs:complexContent">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xs:extension">
+                                                                                       <xs:complexType>
+                                                                                             <xs:sequence>
+                                                                                                   <xs:element name="xs:attribute" maxOccurs="unbounded">
+                                                                                                         <xs:complexType>
+                                                                                                               <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                                                                                               <xs:attribute name="type" type="xs:string"></xs:attribute>
+                                                                                                         </xs:complexType>
+                                                                                                   </xs:element>
+                                                                                             </xs:sequence>
+                                                                                             <xs:attribute name="base" type="xs:string"></xs:attribute>
+                                                                                       </xs:complexType>
+                                                                                 </xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                       <xs:attribute name="substitutionGroup" type="xs:string"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="xs:simpleType" maxOccurs="unbounded">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="xs:restriction">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xs:enumeration" maxOccurs="unbounded">
+                                                                     <xs:complexType>
+                                                                           <xs:attribute name="value" type="xs:string"></xs:attribute>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                         <xs:attribute name="base" type="xs:string"></xs:attribute>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="name" type="xs:string"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                     </xs:sequence>
+                     <xs:attribute name="xmlns:xs" type="xs:string"></xs:attribute>
+                     <xs:attribute name="xmlns:bpsim" type="xs:string"></xs:attribute>
+                     <xs:attribute name="targetNamespace" type="xs:string"></xs:attribute>
+                     <xs:attribute name="elementFormDefault" type="xs:string"></xs:attribute>
+                     <xs:attribute name="attributeFormDefault" type="xs:string"></xs:attribute>
+               </xs:complexType>
+         </xs:element>
+   </xs:schema>
+ 
