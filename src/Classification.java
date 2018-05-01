@@ -536,7 +536,7 @@ class Probability {
             relationCounter:
             for (int i = 0; i < eventName.size(); i++) {
 
-                for (int j = i + 1; j < i + 5; j++) {
+                for (int j = i + 1; j < eventName.size(); j++) {
 
                     if (choice == 2) {
 
