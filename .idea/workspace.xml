@@ -18,8 +18,8 @@
       <file leaf-file-name="Classification.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Classification.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1772">
-              <caret line="630" selection-start-line="630" selection-end-line="630" />
+            <state relative-caret-position="293">
+              <caret line="543" column="26" selection-start-line="543" selection-start-column="26" selection-end-line="543" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -80,7 +80,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="10" />
     <option name="y" value="20" />
     <option name="width" value="1346" />
@@ -236,11 +236,11 @@
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50073206" side_tool="true" weight="0.32750398" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3290938" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49926794" visible="true" weight="0.052464228" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49926794" visible="true" weight="0.052464228" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14055637" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14055637" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -589,8 +589,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Classification.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1772">
-          <caret line="630" selection-start-line="630" selection-end-line="630" />
+        <state relative-caret-position="293">
+          <caret line="543" column="26" selection-start-line="543" selection-start-column="26" selection-end-line="543" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
