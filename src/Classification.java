@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.apache.commons.text.similarity.LevenshteinDistance;
@@ -21,6 +22,9 @@ public class Classification {
 
 
     public static void main(String[] args) throws Exception {
+
+        AllProbabilities all = new AllProbabilities();
+        all.getAllProbabilities();
 
         Resources res = new Resources();
         res.getResources();
@@ -645,6 +649,181 @@ class Probability {
 
 
         return prob;
+    }
+
+}
+
+class AllProbabilities {
+
+    public static HashSet<String> getAllProbabilities() {
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document document = null;
+        try {
+            document = db.parse(new File("C:\\Users\\Justelio\\Desktop\\test\\07735e1b-95a6-4405-9182-1ac672a482b3\\Diagram.xml"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<String> decisions = new ArrayList<>();
+        ArrayList<String> eventName = new ArrayList<>();
+        ArrayList<Float> tracecounter = new ArrayList<Float>(Collections.<Float>nCopies(4, (float) 0));
+        ArrayList<Float> eventCounter = new ArrayList<Float>(Collections.<Float>nCopies(4, (float) 0));
+        String primaryTask = "";
+        String toTask = "";
+        ArrayList<String> to = new ArrayList<>();
+        ArrayList<String> from = new ArrayList<>();
+
+
+        NodeList activityList = document.getElementsByTagName("Activity");
+        NodeList transitionList = document.getElementsByTagName("Transition");
+        HashMap<String, Integer> probabilities = new HashMap<>();
+        String selectedId = "";
+
+
+        for (int x = 0, size = activityList.getLength(); x < size; x++) {
+
+            NodeList childList = activityList.item(x).getChildNodes();
+            for (int j = 0; j < childList.getLength(); j++) {
+                Node childNode = childList.item(j);
+                if ("Route".equals(childNode.getNodeName())) {
+                    decisions.add(activityList.item(x).getAttributes().getNamedItem("Id").getNodeValue());
+                }
+            }
+
+        }
+
+        // iteration BEGIN
+        for (int x = 0, size = transitionList.getLength(); x < size; x++) {
+            for (int i = 0; i < decisions.size(); i++) {
+                if (transitionList.item(x).getAttributes().getNamedItem("To").getNodeValue().contains(decisions.get(i))) {
+                    selectedId = transitionList.item(x).getAttributes().getNamedItem("From").getNodeValue();
+
+
+                    for (int j = 0; j < activityList.getLength(); j++) {
+                        if (activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue().contains(selectedId)) {
+                            from.add(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue());
+                        }
+                    }
+
+
+                }
+
+                if (transitionList.item(x).getAttributes().getNamedItem("From").getNodeValue().contains(decisions.get(i))) {
+                    toTask = transitionList.item(x).getAttributes().getNamedItem("To").getNodeValue();
+
+                    for (int j = 0; j < activityList.getLength(); j++) {
+                        if (activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue().contains(toTask)) {
+                            to.add(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue());
+                        }
+                    }
+                }
+            }
+        } //iteration END
+
+        DocumentBuilderFactory dbf1 = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db1 = null;
+
+        try {
+            db1 = dbf1.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document document1 = null;
+        try {
+            document1 = db1.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\repairExample.xes"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        NodeList nodeList = document1.getElementsByTagName("trace");
+
+        for (int k = 0; k < nodeList.getLength(); k++) {
+            eventName.clear();
+            Element element = (Element) nodeList.item(k);
+            NodeList stringList = element.getElementsByTagName("string");
+
+            for (int x = 1, size = stringList.getLength(); x < size; x++) {
+                if (stringList.item(x).getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+                    eventName.add(stringList.item(x).getAttributes().getNamedItem("value").getNodeValue());
+                }
+            }
+
+            traceCounter:
+            for (int i = 0; i < eventName.size(); i++) {
+
+                for (int j = i + 1; j < eventName.size(); j++) {
+
+                    if (eventName.get(i).contains(from.get(0)) && (eventName.get(j).contains(to.get(0)) || eventName.get(j).contains(to.get(1)))) {
+                        Float value = tracecounter.get(0);
+                        value = value +1;
+                        int index = 0;
+                        tracecounter.set(index, value);
+                        break traceCounter;
+                    }
+
+                    if (eventName.get(i).contains(from.get(1)) && (eventName.get(j).contains(to.get(2)) || eventName.get(j).contains(to.get(3)))) {
+                        tracecounter.set(1, tracecounter.get(1) + 1);
+                        break traceCounter;
+                    }
+                }
+            }
+
+            relationCounter:
+            for (int i = 0; i < eventName.size(); i++) {
+
+                for (int j = i + 1; j < eventName.size(); j++) {
+
+
+                    if (eventName.get(i).contains(from.get(0)) && eventName.get(j).contains(to.get(0))) {
+                        eventCounter.set(0, eventCounter.get(0) + 1);
+                        break relationCounter;
+                    }
+
+                    if (eventName.get(i).contains(from.get(0)) && eventName.get(j).contains(to.get(1))) {
+                        eventCounter.set(1, eventCounter.get(1) + 1);
+                        break relationCounter;
+                    }
+
+                    if (eventName.get(i).contains(from.get(1)) && eventName.get(j).contains(to.get(2))) {
+                        eventCounter.set(2, eventCounter.get(2) + 1);
+                        break relationCounter;
+                    }
+
+                    if (eventName.get(i).contains(from.get(1)) && eventName.get(j).contains(to.get(3))) {
+                        eventCounter.set(3, eventCounter.get(3) + 1);
+                        break relationCounter;
+                    }
+                }
+            }
+        }
+
+        float probability1 = ((float) eventCounter.get(0)) / tracecounter.get(0);
+        float probability2 = ((float) eventCounter.get(1)) / tracecounter.get(0);
+
+        System.out.println("Veiklos is: " + from + " ir veiklos po: " + to);
+
+        System.out.println("Seku skaicius tarp veiklu: " + from.get(0) + " - " + to.get(0) + " =  " + eventCounter.get(0));
+        System.out.println("Seku skaicius tarp veiklu: " + from.get(0) + " - " + to.get(1) + " =  " + eventCounter.get(1));
+
+
+        System.out.println("Tikimybe vykti veiklu sekai: " + from.get(0) + " - " + to.get(0) + " =  " + probability1);
+        System.out.println("Tikimybe vykti veiklu sekai: " + from.get(0) + " - " + to.get(1) + " =  " + probability2);
+
+        HashSet<String> hs = new HashSet<>(decisions);
+
+        System.out.println(hs);
+
+        return hs;
     }
 
 }
