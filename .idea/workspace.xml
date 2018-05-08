@@ -18,8 +18,8 @@
       <file leaf-file-name="Classification.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Classification.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="712" column="109" selection-start-line="712" selection-start-column="109" selection-end-line="712" selection-end-column="109" />
+            <state relative-caret-position="-413">
+              <caret line="757" column="42" selection-start-line="757" selection-start-column="42" selection-end-line="757" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -48,6 +48,7 @@
       <find>choice</find>
       <find>magistaras</find>
       <find>vidutines</find>
+      <find>trace skaičius</find>
       <find>hashmap</find>
     </findStrings>
   </component>
@@ -221,18 +222,18 @@
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50073206" side_tool="true" weight="0.32750398" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3290938" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49926794" weight="0.35069075" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49926794" visible="true" weight="0.35069075" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14635417" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39427662" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39426142" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -280,7 +281,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="121" />
+      <option name="time" value="151" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -602,10 +603,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_161/src.zip!/com/sun/org/apache/xerces/internal/dom/ParentNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="170" selection-start-line="170" selection-end-line="170" />
+          <folding>
+            <element signature="e#6314#6315#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_161/src.zip!/com/sun/org/apache/xerces/internal/dom/NodeImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="1887" selection-start-line="1887" selection-end-line="1887" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_161/src.zip!/com/sun/org/apache/xerces/internal/dom/DeepNodeListImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="141" selection-start-line="141" selection-end-line="141" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_161/src.zip!/java/util/Vector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="501" selection-start-line="501" selection-end-line="501" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Classification.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="712" column="109" selection-start-line="712" selection-start-column="109" selection-end-line="712" selection-end-column="109" />
+        <state relative-caret-position="-413">
+          <caret line="757" column="42" selection-start-line="757" selection-start-column="42" selection-end-line="757" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

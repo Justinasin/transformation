@@ -676,7 +676,7 @@ class AllProbabilities {
         ArrayList<String> decisions = new ArrayList<>();
         ArrayList<String> eventName = new ArrayList<>();
         ArrayList<Float> tracecounter = new ArrayList<Float>(Collections.<Float>nCopies(4, (float) 0));
-        ArrayList<Float> eventCounter = new ArrayList<Float>(Collections.<Float>nCopies(4, (float) 0));
+        Float eventCounter = Float.valueOf(0);
         String primaryTask = "";
         String toTask = "";
         ArrayList<String> to = new ArrayList<>();
@@ -685,8 +685,10 @@ class AllProbabilities {
 
         NodeList activityList = document.getElementsByTagName("Activity");
         NodeList transitionList = document.getElementsByTagName("Transition");
-        HashMap<String, Integer> probabilities = new HashMap<>();
+        HashMap<String, Float> probabilities = new HashMap<>();
         String selectedId = "";
+        String selectedIdName = "";
+        String toIdName = "";
 
 
         for (int x = 0, size = activityList.getLength(); x < size; x++) {
@@ -700,34 +702,6 @@ class AllProbabilities {
             }
 
         }
-
-        // iteration BEGIN
-        for (int x = 0, size = transitionList.getLength(); x < size; x++) {
-            for (int i = 0; i < decisions.size(); i++) {
-                if (transitionList.item(x).getAttributes().getNamedItem("To").getNodeValue().contains(decisions.get(i))) {
-                    selectedId = transitionList.item(x).getAttributes().getNamedItem("From").getNodeValue();
-
-
-                    for (int j = 0; j < activityList.getLength(); j++) {
-                        if (activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue().contains(selectedId)) {
-                            from.add(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue());
-                        }
-                    }
-
-
-                }
-
-                if (transitionList.item(x).getAttributes().getNamedItem("From").getNodeValue().contains(decisions.get(i))) {
-                    toTask = transitionList.item(x).getAttributes().getNamedItem("To").getNodeValue();
-
-                    for (int j = 0; j < activityList.getLength(); j++) {
-                        if (activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue().contains(toTask)) {
-                            to.add(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue());
-                        }
-                    }
-                }
-            }
-        } //iteration END
 
         DocumentBuilderFactory dbf1 = DocumentBuilderFactory.newInstance();
         DocumentBuilder db1 = null;
@@ -747,77 +721,115 @@ class AllProbabilities {
         }
         NodeList nodeList = document1.getElementsByTagName("trace");
 
-        for (int k = 0; k < nodeList.getLength(); k++) {
-            eventName.clear();
-            Element element = (Element) nodeList.item(k);
-            NodeList stringList = element.getElementsByTagName("string");
 
-            for (int x = 1, size = stringList.getLength(); x < size; x++) {
-                if (stringList.item(x).getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
-                    eventName.add(stringList.item(x).getAttributes().getNamedItem("value").getNodeValue());
+        // iteration BEGIN
+
+        for (int a = 0; a < decisions.size(); a++) {
+
+            iter:
+            for (int b = 0, size = transitionList.getLength(); b < size; b++) {
+
+                if (transitionList.item(b).getAttributes().getNamedItem("To").getNodeValue().contains(decisions.get(a))) {
+                    selectedId = transitionList.item(b).getAttributes().getNamedItem("From").getNodeValue();
+                    for (int c = 0; c < activityList.getLength(); c++) {
+                        if (activityList.item(c).getAttributes().getNamedItem("Id").getNodeValue().contains(selectedId)) {
+                            selectedIdName = activityList.item(c).getAttributes().getNamedItem("Name").getNodeValue();
+                        }
+                    }
+                    break iter;
+                } else {
+                    continue iter;
                 }
             }
 
-            traceCounter:
-            for (int i = 0; i < eventName.size(); i++) {
 
-                for (int j = i + 1; j < eventName.size(); j++) {
+//                    for (int j = 0; j < activityList.getLength(); j++) {
+//                        if (activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue().contains(selectedId)) {
+//                            from.add(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue());
+//                        }
+//                    }
 
-                    if (eventName.get(i).contains(from.get(0)) && (eventName.get(j).contains(to.get(0)) || eventName.get(j).contains(to.get(1)))) {
-                        Float value = tracecounter.get(0);
-                        value = value +1;
-                        int index = 0;
-                        tracecounter.set(index, value);
-                        break traceCounter;
-                    }
+                loop:
+                for (int d = 0; d < transitionList.getLength(); d++) {
 
-                    if (eventName.get(i).contains(from.get(1)) && (eventName.get(j).contains(to.get(2)) || eventName.get(j).contains(to.get(3)))) {
-                        tracecounter.set(1, tracecounter.get(1) + 1);
-                        break traceCounter;
-                    }
-                }
-            }
+                    if (transitionList.item(d).getAttributes().getNamedItem("From").getNodeValue().contains(decisions.get(a))) {
+                        toTask = transitionList.item(d).getAttributes().getNamedItem("To").getNodeValue();
 
-            relationCounter:
-            for (int i = 0; i < eventName.size(); i++) {
+                        for (int e = 0; e < activityList.getLength(); e++) {
+                            if (activityList.item(e).getAttributes().getNamedItem("Id").getNodeValue().contains(toTask)) {
+                                toIdName = activityList.item(e).getAttributes().getNamedItem("Name").getNodeValue();
+                            }
+                        }
 
-                for (int j = i + 1; j < eventName.size(); j++) {
-
-
-                    if (eventName.get(i).contains(from.get(0)) && eventName.get(j).contains(to.get(0))) {
-                        eventCounter.set(0, eventCounter.get(0) + 1);
-                        break relationCounter;
-                    }
-
-                    if (eventName.get(i).contains(from.get(0)) && eventName.get(j).contains(to.get(1))) {
-                        eventCounter.set(1, eventCounter.get(1) + 1);
-                        break relationCounter;
-                    }
-
-                    if (eventName.get(i).contains(from.get(1)) && eventName.get(j).contains(to.get(2))) {
-                        eventCounter.set(2, eventCounter.get(2) + 1);
-                        break relationCounter;
-                    }
-
-                    if (eventName.get(i).contains(from.get(1)) && eventName.get(j).contains(to.get(3))) {
-                        eventCounter.set(3, eventCounter.get(3) + 1);
-                        break relationCounter;
+//                            for (int j = 0; j < activityList.getLength(); j++) {
+//                                if (activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue().contains(toTask)) {
+//                                    to.add(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue());
+//                                }
+//                            }
+                        break loop;
+                    } else {
+                        continue loop;
                     }
                 }
-            }
+
+
+                //iteration END
+
+
+                for (int f = 0; f < nodeList.getLength(); f++) {
+                    eventName.clear();
+                    Element element = (Element) nodeList.item(f);
+                    NodeList stringList = element.getElementsByTagName("string");
+
+                    for (int g = 1; g < stringList.getLength(); g++) {
+                        if (stringList.item(g).getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+                            eventName.add(stringList.item(g).getAttributes().getNamedItem("value").getNodeValue());
+                        }
+                    }
+
+                    relationCounter:
+                    for (int h = 0; h < eventName.size(); h++) {
+
+                        for (int i = h + 1; i < eventName.size(); i++) {
+
+
+                            if (eventName.get(h).contains(selectedIdName) && eventName.get(i).contains(toIdName)) {
+                                eventCounter++;
+                                break relationCounter;
+                            }
+                        }
+                    }
+                }
+
+
+                float probability = eventCounter / nodeList.getLength();
+                probabilities.put(selectedIdName + " - " + toIdName, probability);
+                System.out.println(probabilities);
+
+
         }
 
-        float probability1 = ((float) eventCounter.get(0)) / tracecounter.get(0);
-        float probability2 = ((float) eventCounter.get(1)) / tracecounter.get(0);
 
-        System.out.println("Veiklos is: " + from + " ir veiklos po: " + to);
+//            traceCounter:
+//            for (int i = 0; i < eventName.size(); i++) {
+//
+//                for (int j = i + 1; j < eventName.size(); j++) {
+//
+//                    if (eventName.get(i).contains(from.get(0)) && (eventName.get(j).contains(to.get(0)) || eventName.get(j).contains(to.get(1)))) {
+//                        Float value = tracecounter.get(0);
+//                        value = value + 1;
+//                        int index = 0;
+//                        tracecounter.set(index, value);
+//                        break traceCounter;
+//                    }
+//
+//                    if (eventName.get(i).contains(from.get(1)) && (eventName.get(j).contains(to.get(2)) || eventName.get(j).contains(to.get(3)))) {
+//                        tracecounter.set(1, tracecounter.get(1) + 1);
+//                        break traceCounter;
+//                    }
+//                }
+//            }
 
-        System.out.println("Seku skaicius tarp veiklu: " + from.get(0) + " - " + to.get(0) + " =  " + eventCounter.get(0));
-        System.out.println("Seku skaicius tarp veiklu: " + from.get(0) + " - " + to.get(1) + " =  " + eventCounter.get(1));
-
-
-        System.out.println("Tikimybe vykti veiklu sekai: " + from.get(0) + " - " + to.get(0) + " =  " + probability1);
-        System.out.println("Tikimybe vykti veiklu sekai: " + from.get(0) + " - " + to.get(1) + " =  " + probability2);
 
         HashSet<String> hs = new HashSet<>(decisions);
 
@@ -825,6 +837,7 @@ class AllProbabilities {
 
         return hs;
     }
-
 }
+
+
 
