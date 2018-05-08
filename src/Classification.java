@@ -675,8 +675,9 @@ class AllProbabilities {
 
         ArrayList<String> decisions = new ArrayList<>();
         ArrayList<String> eventName = new ArrayList<>();
-        ArrayList<Float> tracecounter = new ArrayList<Float>(Collections.<Float>nCopies(4, (float) 0));
         Float eventCounter = Float.valueOf(0);
+        Float traceCounter = Float.valueOf(0);
+
         String primaryTask = "";
         String toTask = "";
         ArrayList<String> to = new ArrayList<>();
@@ -685,7 +686,7 @@ class AllProbabilities {
 
         NodeList activityList = document.getElementsByTagName("Activity");
         NodeList transitionList = document.getElementsByTagName("Transition");
-        HashMap<String, Float> probabilities = new HashMap<>();
+        HashMap<String, String> probabilities = new HashMap<>();
         String selectedId = "";
         String selectedIdName = "";
         String toIdName = "";
@@ -725,6 +726,7 @@ class AllProbabilities {
         // iteration BEGIN
 
         for (int a = 0; a < decisions.size(); a++) {
+            to.clear();
 
             iter:
             for (int b = 0, size = transitionList.getLength(); b < size; b++) {
@@ -749,63 +751,66 @@ class AllProbabilities {
 //                        }
 //                    }
 
-                loop:
-                for (int d = 0; d < transitionList.getLength(); d++) {
+            loop:
+            for (int d = 0; d < transitionList.getLength(); d++) {
 
-                    if (transitionList.item(d).getAttributes().getNamedItem("From").getNodeValue().contains(decisions.get(a))) {
-                        toTask = transitionList.item(d).getAttributes().getNamedItem("To").getNodeValue();
+                if (transitionList.item(d).getAttributes().getNamedItem("From").getNodeValue().contains(decisions.get(a))) {
+                    toTask = transitionList.item(d).getAttributes().getNamedItem("To").getNodeValue();
 
-                        for (int e = 0; e < activityList.getLength(); e++) {
-                            if (activityList.item(e).getAttributes().getNamedItem("Id").getNodeValue().contains(toTask)) {
-                                toIdName = activityList.item(e).getAttributes().getNamedItem("Name").getNodeValue();
-                            }
-                        }
-
-//                            for (int j = 0; j < activityList.getLength(); j++) {
-//                                if (activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue().contains(toTask)) {
-//                                    to.add(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue());
-//                                }
-//                            }
-                        break loop;
-                    } else {
-                        continue loop;
-                    }
-                }
-
-
-                //iteration END
-
-
-                for (int f = 0; f < nodeList.getLength(); f++) {
-                    eventName.clear();
-                    Element element = (Element) nodeList.item(f);
-                    NodeList stringList = element.getElementsByTagName("string");
-
-                    for (int g = 1; g < stringList.getLength(); g++) {
-                        if (stringList.item(g).getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
-                            eventName.add(stringList.item(g).getAttributes().getNamedItem("value").getNodeValue());
+                    for (int e = 0; e < activityList.getLength(); e++) {
+                        if (activityList.item(e).getAttributes().getNamedItem("Id").getNodeValue().contains(toTask)) {
+                            toIdName = activityList.item(e).getAttributes().getNamedItem("Name").getNodeValue();
                         }
                     }
 
-                    relationCounter:
-                    for (int h = 0; h < eventName.size(); h++) {
-
-                        for (int i = h + 1; i < eventName.size(); i++) {
-
-
-                            if (eventName.get(h).contains(selectedIdName) && eventName.get(i).contains(toIdName)) {
-                                eventCounter++;
-                                break relationCounter;
-                            }
+                    for (int j = 0; j < activityList.getLength(); j++) {
+                        if (activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue().contains(toTask)) {
+                            to.add(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue());
                         }
                     }
                 }
+            }
 
 
-                float probability = eventCounter / nodeList.getLength();
-                probabilities.put(selectedIdName + " - " + toIdName, probability);
-                System.out.println(probabilities);
+            //iteration END
 
+
+            for (int j = 0; j < to.size(); j++) {
+
+                    eventCounter = Float.valueOf(0);
+                    for (int f = 0; f < nodeList.getLength(); f++) {
+                        eventName.clear();
+                        Element element = (Element) nodeList.item(f);
+                        NodeList stringList = element.getElementsByTagName("string");
+
+                        for (int g = 1; g < stringList.getLength(); g++) {
+                            if (stringList.item(g).getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+                                eventName.add(stringList.item(g).getAttributes().getNamedItem("value").getNodeValue());
+                            }
+                        }
+
+                        relationCounter:
+                        for (int h = 0; h < eventName.size(); h++) {
+
+                            for (int i = h + 1; i < eventName.size(); i++) {
+
+
+                                if (eventName.get(h).contains(selectedIdName) && eventName.get(i).contains(to.get(j))) {
+                                    eventCounter++;
+                                    traceCounter++;
+                                    break relationCounter;
+                                }
+                            }
+                        }
+                    }
+
+                    float probability = eventCounter / nodeList.getLength();
+                    String out = String.format("%.2f", probability);
+                    probabilities.put(selectedIdName + " - " + to.get(j), out);
+                    System.out.println(probabilities);
+
+
+            }
 
         }
 
