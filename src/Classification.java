@@ -674,10 +674,8 @@ class AllProbabilities {
         }
 
         ArrayList<String> decisions = new ArrayList<>();
-        ArrayList<String> eventName = new ArrayList<>();
+        ArrayList<Float> tracecounter = new ArrayList<Float>(Collections.<Float>nCopies(4, (float) 0));
         Float eventCounter = Float.valueOf(0);
-        Float traceCounter = Float.valueOf(0);
-
         String primaryTask = "";
         String toTask = "";
         ArrayList<String> to = new ArrayList<>();
@@ -686,18 +684,16 @@ class AllProbabilities {
 
         NodeList activityList = document.getElementsByTagName("Activity");
         NodeList transitionList = document.getElementsByTagName("Transition");
-        HashMap<String, String> probabilities = new HashMap<>();
-        String selectedId = "";
-        String selectedIdName = "";
-        String toIdName = "";
-
+        HashMap<String, Float> probabilities = new HashMap<>();
 
         for (int x = 0, size = activityList.getLength(); x < size; x++) {
 
             NodeList childList = activityList.item(x).getChildNodes();
             for (int j = 0; j < childList.getLength(); j++) {
                 Node childNode = childList.item(j);
-                if ("Route".equals(childNode.getNodeName())) {
+                String childNodeName = childNode.getNodeName();
+                if ("Route".equals(childNodeName)) {
+                    //Route elementai, kuria yra Activity vaikai, yra sprendimo mazgai. Pridedam i sprendimu mazgu masyva Route elemento id.
                     decisions.add(activityList.item(x).getAttributes().getNamedItem("Id").getNodeValue());
                 }
             }
@@ -720,122 +716,140 @@ class AllProbabilities {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        NodeList nodeList = document1.getElementsByTagName("trace");
+        NodeList traceList = document1.getElementsByTagName("trace");
 
 
-        // iteration BEGIN
-
+        String selectedId = "";
+        String selectedIdName = "";
+        String toIdName = "";
+        HashMap<String, Float> transitionProbabilities = new HashMap<String, Float>();
         for (int a = 0; a < decisions.size(); a++) {
-            to.clear();
 
-            iter:
+            String currentDecision = decisions.get(a);
+
+            //hashmap for each activity and transitions leading to the decision
+            HashMap<String, ArrayList<String>> activitiesLeadingToDecision = new HashMap<>();
+            HashMap<String, ArrayList<String>> activitiesComingFromDecision = new HashMap<>();
+
+            //retrieve the activities that come before the decision and the transitions that implement the lead-up to the decision
             for (int b = 0, size = transitionList.getLength(); b < size; b++) {
 
-                if (transitionList.item(b).getAttributes().getNamedItem("To").getNodeValue().contains(decisions.get(a))) {
-                    selectedId = transitionList.item(b).getAttributes().getNamedItem("From").getNodeValue();
+
+                String transitionId = transitionList.item(b).getAttributes().getNamedItem("Id").getNodeValue();
+                String currentTransitionToValue = transitionList.item(b).getAttributes().getNamedItem("To").getNodeValue();
+                String currentTransitionFromValue = transitionList.item(b).getAttributes().getNamedItem("From").getNodeValue();
+
+                //does transition lead to decision?
+                boolean transitionLeadsToDecision = currentTransitionToValue.contains(currentDecision);
+
+                //if so, find the name of the activity that leads to transition
+                if (transitionLeadsToDecision) {
                     for (int c = 0; c < activityList.getLength(); c++) {
-                        if (activityList.item(c).getAttributes().getNamedItem("Id").getNodeValue().contains(selectedId)) {
-                            selectedIdName = activityList.item(c).getAttributes().getNamedItem("Name").getNodeValue();
-                        }
-                    }
-                    break iter;
-                } else {
-                    continue iter;
-                }
-            }
 
+                        String activityId = activityList.item(c).getAttributes().getNamedItem("Id").getNodeValue();
+                        if (activityId.contains(currentTransitionFromValue)) {
+                            String activityName = activityList.item(c).getAttributes().getNamedItem("Name").getNodeValue();
 
-//                    for (int j = 0; j < activityList.getLength(); j++) {
-//                        if (activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue().contains(selectedId)) {
-//                            from.add(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue());
-//                        }
-//                    }
-
-            loop:
-            for (int d = 0; d < transitionList.getLength(); d++) {
-
-                if (transitionList.item(d).getAttributes().getNamedItem("From").getNodeValue().contains(decisions.get(a))) {
-                    toTask = transitionList.item(d).getAttributes().getNamedItem("To").getNodeValue();
-
-                    for (int e = 0; e < activityList.getLength(); e++) {
-                        if (activityList.item(e).getAttributes().getNamedItem("Id").getNodeValue().contains(toTask)) {
-                            toIdName = activityList.item(e).getAttributes().getNamedItem("Name").getNodeValue();
-                        }
-                    }
-
-                    for (int j = 0; j < activityList.getLength(); j++) {
-                        if (activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue().contains(toTask)) {
-                            to.add(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue());
-                        }
-                    }
-                }
-            }
-
-
-            //iteration END
-
-
-            for (int j = 0; j < to.size(); j++) {
-
-                    eventCounter = Float.valueOf(0);
-                    for (int f = 0; f < nodeList.getLength(); f++) {
-                        eventName.clear();
-                        Element element = (Element) nodeList.item(f);
-                        NodeList stringList = element.getElementsByTagName("string");
-
-                        for (int g = 1; g < stringList.getLength(); g++) {
-                            if (stringList.item(g).getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
-                                eventName.add(stringList.item(g).getAttributes().getNamedItem("value").getNodeValue());
+                            //add the found activity name to the list of activities leading to the decision
+                            if (activitiesLeadingToDecision.containsKey(activityName)) {
+                                activitiesLeadingToDecision.get(activityName).add(transitionId);
+                            } else {
+                                ArrayList<String> transitionIds = new ArrayList<>();
+                                transitionIds.add(transitionId);
+                                activitiesLeadingToDecision.put(activityName, transitionIds);
                             }
                         }
+                    }
+                }
+            }
 
-                        relationCounter:
-                        for (int h = 0; h < eventName.size(); h++) {
-
-                            for (int i = h + 1; i < eventName.size(); i++) {
+            //retrieve the activities that come after the decision and the transitions that implement the follow-up to the decision
+            for (int d = 0; d < transitionList.getLength(); d++) {
 
 
-                                if (eventName.get(h).contains(selectedIdName) && eventName.get(i).contains(to.get(j))) {
-                                    eventCounter++;
-                                    traceCounter++;
-                                    break relationCounter;
+                String transitionId = transitionList.item(d).getAttributes().getNamedItem("Id").getNodeValue();
+                String currentTransitionToValue = transitionList.item(d).getAttributes().getNamedItem("To").getNodeValue();
+                String currentTransitionFromValue = transitionList.item(d).getAttributes().getNamedItem("From").getNodeValue();
+
+                //does transition lead to decision?
+                boolean decisionLeadsToTransition = currentTransitionFromValue.contains(currentDecision);
+
+                //if so, find the name of the activity that comes from the decision
+                if (decisionLeadsToTransition) {
+
+                    for (int e = 0; e < activityList.getLength(); e++) {
+
+                        String activityId = activityList.item(e).getAttributes().getNamedItem("Id").getNodeValue();
+                        if (activityId.contains(currentTransitionToValue)) {
+                            String activityName = activityList.item(e).getAttributes().getNamedItem("Name").getNodeValue();
+                            //add the found activity name to the list of activities coming from the decision
+                            if (activitiesComingFromDecision.containsKey(activityName)) {
+                                activitiesComingFromDecision.get(activityName).add(transitionId);
+                            } else {
+                                ArrayList<String> transitionIds = new ArrayList<>();
+                                transitionIds.add(transitionId);
+                                activitiesComingFromDecision.put(activityName, transitionIds);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //calculate the transition probabilities
+            HashMap<String, Integer> transitionCounts = new HashMap<>();
+            for (int f = 0; f < traceList.getLength(); f++) {
+                ArrayList<String> eventName = new ArrayList<>();
+                Element trace = (Element) traceList.item(f);
+                NodeList stringList = trace.getElementsByTagName("string");
+
+                //collect all event names in the trace
+                for (int g = 1; g < stringList.getLength(); g++) {
+                    if (stringList.item(g).getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+                        eventName.add(stringList.item(g).getAttributes().getNamedItem("value").getNodeValue());
+                    }
+                }
+
+
+                for (int h = 0; h < eventName.size() - 1; h++) {
+                    String firstEvent = eventName.get(h);
+                    for (int i = h + 1; i < eventName.size(); i++) {
+                        String secondEvent = eventName.get(i);
+
+                        //if the first event leads to second event in the model
+                        if (activitiesLeadingToDecision.containsKey(firstEvent) && activitiesComingFromDecision.containsKey(secondEvent)) {
+
+                            //increment the counter for the transitions that lead to the second event in this decision
+                            ArrayList<String> transitionList1 = activitiesComingFromDecision.get(secondEvent);
+                            for (int j = 0; j < transitionList1.size(); j++) {
+                                String transition = transitionList1.get(j);
+                                if (transitionCounts.containsKey(transition)) {
+                                    transitionCounts.put(transition, transitionCounts.get(transition) + 1);
+                                } else {
+                                    transitionCounts.put(transition, 1);
                                 }
                             }
                         }
                     }
+                }
+            }
 
-                    float probability = eventCounter / nodeList.getLength();
-                    String out = String.format("%.2f", probability);
-                    probabilities.put(selectedIdName + " - " + to.get(j), out);
-                    System.out.println(probabilities);
+            //count the total of all transitions noticed
+            int totalTransitionCount = 0;
+            Set<String> transitionNames = transitionCounts.keySet();
+            for (String s : transitionNames) {
+                totalTransitionCount += transitionCounts.get(s);
+            }
+
+            //finally, calculate the probabilities for the transitions coming out from this decision and going to activities
+
+            for (String s : transitionNames) {
+                float transitionProbability = (float) transitionCounts.get(s) / totalTransitionCount;
+                transitionProbabilities.put(s, transitionProbability);
 
 
             }
-
         }
-
-
-//            traceCounter:
-//            for (int i = 0; i < eventName.size(); i++) {
-//
-//                for (int j = i + 1; j < eventName.size(); j++) {
-//
-//                    if (eventName.get(i).contains(from.get(0)) && (eventName.get(j).contains(to.get(0)) || eventName.get(j).contains(to.get(1)))) {
-//                        Float value = tracecounter.get(0);
-//                        value = value + 1;
-//                        int index = 0;
-//                        tracecounter.set(index, value);
-//                        break traceCounter;
-//                    }
-//
-//                    if (eventName.get(i).contains(from.get(1)) && (eventName.get(j).contains(to.get(2)) || eventName.get(j).contains(to.get(3)))) {
-//                        tracecounter.set(1, tracecounter.get(1) + 1);
-//                        break traceCounter;
-//                    }
-//                }
-//            }
-
-
+        System.out.println(transitionProbabilities);
         HashSet<String> hs = new HashSet<>(decisions);
 
         System.out.println(hs);
