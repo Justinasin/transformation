@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -8,11 +9,14 @@ import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
@@ -22,6 +26,9 @@ public class Classification {
 
 
     public static void main(String[] args) throws Exception {
+
+        XmlGenerator xml = new XmlGenerator();
+        xml.generateXml();
 
         AllProbabilities all = new AllProbabilities();
         all.getAllProbabilities();
@@ -856,6 +863,175 @@ class AllProbabilities {
 
         return hs;
     }
+}
+
+class XmlGenerator {
+
+    public static void generateXml() {
+
+        try {
+
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+            // BPSimData elements
+            Document doc = docBuilder.newDocument();
+            Element BPSimData = doc.createElement("ns1:BPSimData");
+            doc.appendChild(BPSimData);
+
+            //set attribute to BPSimData element
+
+            Attr BPSimData1 = doc.createAttribute("simulationLevel");
+            BPSimData1.setValue("LevelFour");
+            BPSimData.setAttributeNode(BPSimData1);
+
+            Attr BPSimData2 = doc.createAttribute("xmlns:ns1");
+            BPSimData2.setValue("http://www.bpsim.org/schemas/1.0");
+            BPSimData.setAttributeNode(BPSimData2);
+
+            // Scenario elements
+            Element Scenario = doc.createElement("ns1:Scenario");
+            BPSimData.appendChild(Scenario);
+
+            // set attribute to Scenario element
+            Attr Scenario1 = doc.createAttribute("id");
+            Scenario1.setValue("Scenario_f3a589ef-68a5-4983-b017-407f8e264e3b");
+            Scenario.setAttributeNode(Scenario1);
+
+            Attr Scenario2 = doc.createAttribute("name");
+            Scenario2.setValue("Scenario 1");
+            Scenario.setAttributeNode(Scenario2);
+
+            Attr Scenario3 = doc.createAttribute("author");
+            Scenario3.setValue("Justelio");
+            Scenario.setAttributeNode(Scenario3);
+
+            Attr Scenario4 = doc.createAttribute("version");
+            Scenario4.setValue("1.0");
+            Scenario.setAttributeNode(Scenario4);
+
+            // ScenarioParameters elements
+            Element ScenarioParameters = doc.createElement("ns1:ScenarioParameters");
+            Scenario.appendChild(ScenarioParameters);
+
+            // Duration elements
+            Element Duration = doc.createElement("ns1:Duration");
+            ScenarioParameters.appendChild(Duration);
+
+            // DurationParameter elements
+            Element DurationParameter = doc.createElement("ns1:DurationParameter");
+            Duration.appendChild(DurationParameter);
+
+            // PropertyParameters elements
+            Element PropertyParameters1 = doc.createElement("ns1:PropertyParameters");
+            ScenarioParameters.appendChild(PropertyParameters1);
+
+            // ElementParameters1 elements
+            Element ElementParameters1 = doc.createElement("ns1:ElementParameters");
+            Scenario.appendChild(ElementParameters1);
+
+            // set attribute to ElementParameters1 element
+            Attr ElementParameters11 = doc.createAttribute("elementRef");
+            ElementParameters11.setValue("Id_4c71c2ff-4b98-44fc-a66a-e5ab640832f7");
+            ElementParameters1.setAttributeNode(ElementParameters11);
+
+            // PropertyParameters1 elements
+            Element PropertyParameters2 = doc.createElement("ns1:PropertyParameters");
+            ElementParameters1.appendChild(PropertyParameters2);
+
+            // ElementParameters2 elements
+            Element ElementParameters2 = doc.createElement("ns1:ElementParameters");
+            Scenario.appendChild(ElementParameters2);
+
+            // set attribute to ElementParameters2 elements ž
+            Attr ElementParameters21 = doc.createAttribute("elementRef");
+            ElementParameters21.setValue("Id_3ac1ea1c-1349-4ff3-9c34-89ab9f3943bb");
+            ElementParameters2.setAttributeNode(ElementParameters21);
+
+            // ControlParameters1 elements
+            Element ControlParameters1 = doc.createElement("ns1:ControlParameters");
+            ElementParameters2.appendChild(ControlParameters1);
+
+            // Probability1 elements
+            Element Probability1 = doc.createElement("ns1:Probability");
+            ControlParameters1.appendChild(Probability1);
+
+            // Floating1 elements
+            Element FloatingParameter1 = doc.createElement("ns1:FloatingParameter");
+            Probability1.appendChild(FloatingParameter1);
+
+            // set attribute to Floating1 element
+            Attr FloatingParameter11 = doc.createAttribute("value");
+            FloatingParameter11.setValue("0.33");
+            FloatingParameter1.setAttributeNode(FloatingParameter11);
+
+            // PropertyParameters3 elements
+            Element PropertyParameters3 = doc.createElement("ns1:PropertyParameters");
+            ElementParameters2.appendChild(PropertyParameters3);
+
+
+
+
+
+
+
+
+            // ElementParameters3 elements
+            Element ElementParameters3 = doc.createElement("ns1:ElementParameters");
+            Scenario.appendChild(ElementParameters3);
+
+            // set attribute to ElementParameters2 elements ž
+            Attr ElementParameters31 = doc.createAttribute("elementRef");
+            ElementParameters31.setValue("Id_3eb60779-086b-48fa-9981-1005e3461871");
+            ElementParameters3.setAttributeNode(ElementParameters31);
+
+            // ControlParameters2 elements
+            Element ControlParameters2 = doc.createElement("ns1:ControlParameters");
+            ElementParameters3.appendChild(ControlParameters2);
+
+            // Probability2 elements
+            Element Probability2 = doc.createElement("ns1:Probability");
+            ControlParameters2.appendChild(Probability2);
+
+            // Floating2 elements
+            Element FloatingParameter2 = doc.createElement("ns1:FloatingParameter");
+            Probability2.appendChild(FloatingParameter2);
+
+            // set attribute to Floating2 element
+            Attr FloatingParameter21 = doc.createAttribute("value");
+            FloatingParameter21.setValue("0.67");
+            FloatingParameter2.setAttributeNode(FloatingParameter21);
+
+            // PropertyParameters4 elements
+            Element PropertyParameters4 = doc.createElement("ns1:PropertyParameters");
+            ElementParameters3.appendChild(PropertyParameters4);
+
+
+
+
+
+
+
+            // write the content into xml file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("C:\\Users\\Justelio\\Desktop\\file.xml"));
+
+            // Output to console for testing
+            // StreamResult result = new StreamResult(System.out);
+
+            transformer.transform(source, result);
+
+            System.out.println("File saved on desktop!");
+
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+        } catch (TransformerException tfe) {
+            tfe.printStackTrace();
+        }
+    }
+
 }
 
 
