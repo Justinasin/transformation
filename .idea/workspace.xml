@@ -21,8 +21,8 @@
       <file leaf-file-name="Classification.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Classification.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="1006" column="64" lean-forward="true" selection-start-line="1006" selection-start-column="64" selection-end-line="1006" selection-end-column="64" />
+            <state relative-caret-position="473">
+              <caret line="1543" column="37" lean-forward="true" selection-start-line="1543" selection-start-column="37" selection-end-line="1543" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#25807#25814#0" expanded="true" />
@@ -59,6 +59,12 @@
       <find>float</find>
       <find>transitionCounts</find>
       <find>float transitionProbability = transitionCounts.get(s)/totalTransitionCount;</find>
+      <find>resource</find>
+      <find>resourceParame</find>
+      <find>encoding</find>
+      <find>ElementParameters11</find>
+      <find>PropertyParameters13</find>
+      <find>PropertyParameters</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -231,7 +237,7 @@
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50073206" side_tool="true" weight="0.32750398" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3290938" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49926794" visible="true" weight="0.34976152" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49926794" weight="0.34976152" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -768,10 +774,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_161/src.zip!/javax/xml/parsers/DocumentBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="101">
+          <caret line="279" column="29" selection-start-line="279" selection-start-column="29" selection-end-line="279" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_161/src.zip!/javax/xml/parsers/DocumentBuilderFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-8972">
+          <caret line="40" column="22" selection-start-line="40" selection-start-column="22" selection-end-line="40" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Classification.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="1006" column="64" lean-forward="true" selection-start-line="1006" selection-start-column="64" selection-end-line="1006" selection-end-column="64" />
+        <state relative-caret-position="473">
+          <caret line="1543" column="37" lean-forward="true" selection-start-line="1543" selection-start-column="37" selection-end-line="1543" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#25807#25814#0" expanded="true" />
