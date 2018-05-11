@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.*;
 import java.util.*;
 
@@ -34,12 +33,12 @@ public class Classification {
         ActivityAttributes act = new ActivityAttributes();
         act.generateActivityAttributes();
 
+        Duration dur = new Duration();
+        dur.getDurations();
+
         XmlGenerator xml = new XmlGenerator();
         xml.generateXml();
 
-
-        Duration dur = new Duration();
-        dur.getDurations();
 
     }
 
@@ -177,6 +176,7 @@ class Duration {
 
     public static ArrayList<ActivityProperties> getDurations() throws ParseException {
 
+
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = null;
         try {
@@ -210,26 +210,6 @@ class Duration {
             Element element = (Element) nodeList.item(k);
             NodeList stringList = element.getElementsByTagName("string");
             NodeList eventList = element.getElementsByTagName("event");
-
-            /*for (int x = 0, size = eventList.getLength(); x < size; x++) {
-                NodeList childList = eventList.item(x).getChildNodes(); // VIENO IVYKIO VISI VAIKAI
-                for (int j = 0; j < childList.getLength(); j++) { // ITERUOJAME PER VAIKU SARASA
-                    Node childNode = childList.item(j); // VIENAS VAIKAS
-                    String childNodeName = childNode.getNodeName();
-                    if ("string".equals(childNodeName)) {
-                        if(childNode.getAttributes().getNamedItem("key").getNodeValue().contains("org:resource")){ //klaida
-                            resourceNameOfNode = childNode.getAttributes().getNamedItem("value").getNodeValue();
-
-                        }
-                        if(childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")){
-                            conceptNameOfNode = childList.item(j).getAttributes().getNamedItem("value").getNodeValue();
-                        }
-                    }
-                }
-                eventResource.put(resourceNameOfNode,conceptNameOfNode);
-
-            }*/
-
 
 
             NodeList dateList = element.getElementsByTagName("date");
@@ -410,7 +390,27 @@ class ActivityAttributes {
             e.printStackTrace();
         }
 
+
+        DocumentBuilderFactory dbf1 = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db1 = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document document1 = null;
+        try {
+            document1 = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\repairExample.xes"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         NodeList activityList = document.getElementsByTagName("Activity");
+
+        NodeList eventList = document1.getElementsByTagName("event");
 
         for (int i = 0; i < properties.size(); i++) {
 
@@ -426,8 +426,35 @@ class ActivityAttributes {
 
             }
         }
+        String childNodeName;
+        String resourceNameOfNode = "";
+        String conceptNameOfNode = "";
+        loop:
+        for (int i = 0; i < properties.size(); i++) {
+            for (int x = 0, size = eventList.getLength(); x < size; x++) {
+                NodeList childList = eventList.item(x).getChildNodes(); // VIENO IVYKIO VISI VAIKAI
+                for (int j = 0; j < childList.getLength(); j++) { // ITERUOJAME PER VAIKU SARASA
+                    Node childNode = childList.item(j); // VIENAS VAIKAS
+                    childNodeName = childNode.getNodeName();
+                    if ("string".equals(childNodeName)) {
+                        if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("org:resource")) { //klaida
+                            resourceNameOfNode = childNode.getAttributes().getNamedItem("value").getNodeValue();
+
+                        }
+                        if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name") && childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals(properties.get(i).name)) {
+                            conceptNameOfNode = childList.item(j).getAttributes().getNamedItem("value").getNodeValue();
+                            properties.get(i).resource = resourceNameOfNode;
+                            System.out.println(resourceNameOfNode);
+                            continue loop;
+                        }
+
+                    }
+                }
+            }
+        }
+
         System.out.println(properties);
-        return properties; // GAUNAMAS IVYKIO PAVADINIMAS, ID ir RESURSU KIEKIS
+        return properties; // GAUNAMAS IVYKIO PAVADINIMAS, ID ir TRUKME
     }
 
 }
@@ -435,15 +462,6 @@ class ActivityAttributes {
 class ActivityProperties {
     String name;
     String duration;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     String id;
     String resource;
 }
