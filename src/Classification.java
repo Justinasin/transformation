@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.*;
 import java.util.*;
 
@@ -142,9 +143,34 @@ class ResourcesQuantity {
     String resourceQuantity;
 }
 
+class UnikaliuIvikiuResursai {
+
+    String ivykis;
+    String resursas;
+
+   /* public String getIvykis(){
+        return ivykis;
+    }
+
+    public void setIvykis(String ivykis){
+        this.ivykis=ivykis;
+    }
+
+    public String getResursas(){
+        return resursas;
+    }
+
+    public void setResursas(String resursas){
+        this.resursas=resursas;
+    }*/
+
+
+}
+
 class Duration {
 
     public static ArrayList<String> eventName = new ArrayList<>();
+    public static ArrayList<String> resourceName = new ArrayList<>();
     public static ArrayList<String> time = new ArrayList<>();
     public static ArrayList<String> status = new ArrayList<>();
     public static ArrayList<Integer> minutes = new ArrayList<>();
@@ -170,7 +196,7 @@ class Duration {
         HashMap<String, Integer> veikliuTrukmiuSumos = new HashMap<>(); //veiklu trukmiu sumos
         HashMap<String, Integer> veikluVyksmuKiekiai = new HashMap<>(); //veiklu kiekiai
         ArrayList<String> uniqueEvents = new ArrayList<>();
-
+        ArrayList<UnikaliuIvikiuResursai> uniq = new ArrayList<>();
 
         NodeList nodeList = document.getElementsByTagName("trace");
 
@@ -183,6 +209,28 @@ class Duration {
             status.clear();
             Element element = (Element) nodeList.item(k);
             NodeList stringList = element.getElementsByTagName("string");
+            NodeList eventList = element.getElementsByTagName("event");
+
+            /*for (int x = 0, size = eventList.getLength(); x < size; x++) {
+                NodeList childList = eventList.item(x).getChildNodes(); // VIENO IVYKIO VISI VAIKAI
+                for (int j = 0; j < childList.getLength(); j++) { // ITERUOJAME PER VAIKU SARASA
+                    Node childNode = childList.item(j); // VIENAS VAIKAS
+                    String childNodeName = childNode.getNodeName();
+                    if ("string".equals(childNodeName)) {
+                        if(childNode.getAttributes().getNamedItem("key").getNodeValue().contains("org:resource")){ //klaida
+                            resourceNameOfNode = childNode.getAttributes().getNamedItem("value").getNodeValue();
+
+                        }
+                        if(childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")){
+                            conceptNameOfNode = childList.item(j).getAttributes().getNamedItem("value").getNodeValue();
+                        }
+                    }
+                }
+                eventResource.put(resourceNameOfNode,conceptNameOfNode);
+
+            }*/
+
+
 
             NodeList dateList = element.getElementsByTagName("date");
 
@@ -190,10 +238,14 @@ class Duration {
             //--- Get all events names ---//
 
             for (int x = 1, size = stringList.getLength(); x < size; x++) {
+                if (stringList.item(x).getAttributes().getNamedItem("key").getNodeValue().contains("org:resource")) {
+                    resourceName.add(stringList.item(x).getAttributes().getNamedItem("value").getNodeValue());
+                }
                 if (stringList.item(x).getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
                     eventName.add(stringList.item(x).getAttributes().getNamedItem("value").getNodeValue());
                 }
             }
+
 
             //--- Gaunamos unikalios veiklos ---//
 
@@ -205,6 +257,39 @@ class Duration {
                     uniqueEvents.add(ivykisI);
                 }
             }
+
+            /*ArrayList<UnikaliuIvikiuResursai> listOfEvents = new ArrayList<>();
+            String resourceNameOfNode = "";
+            String conceptNameOfNode = "";
+            int m = 0;
+
+            loop:
+            for (int i = 0; i < uniqueEvents.size(); i++) {
+
+                for (int x = 0, size = eventList.getLength(); x < size; x++) {
+                    NodeList childList = eventList.item(x).getChildNodes(); // VIENO IVYKIO VISI VAIKAI
+                    for (int j = 0; j < childList.getLength(); j++) { // ITERUOJAME PER VAIKU SARASA
+                        Node childNode = childList.item(j); // VIENAS VAIKAS
+                        String childNodeName = childNode.getNodeName();
+                        if ("string".equals(childNodeName)) {
+                            if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("org:resource")) { //klaida
+                                resourceNameOfNode = childNode.getAttributes().getNamedItem("value").getNodeValue();
+
+                            }
+                            if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name") || childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals(uniqueEvents.get(i))) {
+                                conceptNameOfNode = childList.item(j).getAttributes().getNamedItem("value").getNodeValue();
+                                ArrayList<UnikaliuIvikiuResursai> u = new ArrayList<>();
+
+                                listOfEvents.get(m).resursas = resourceNameOfNode;
+                                m++;
+                                continue loop;
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.println(listOfEvents);*/
+
 
             //--- Get all times of every event in trace ---//
 
@@ -287,6 +372,7 @@ class Duration {
             ActivityProperties prop = new ActivityProperties();
             prop.name = s;
             prop.duration = Integer.toString(veikluVidutinesTrukmes.get(s));
+            prop.id = "";
             props.add(prop);
         }
 
@@ -327,21 +413,21 @@ class ActivityAttributes {
         NodeList activityList = document.getElementsByTagName("Activity");
 
         for (int i = 0; i < properties.size(); i++) {
-            int currectIndex = i;
 
             for (int j = 0, size = activityList.getLength(); j < size; j++) {
 
-                if(activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue().equals(properties.get(i).name)){
+                if (activityList.item(j).getAttributes().getNamedItem("Name").getNodeValue().equals(properties.get(i).name)) {
 
                     String currentId = activityList.item(j).getAttributes().getNamedItem("Id").getNodeValue();
-                    properties.get(currectIndex)
+                    properties.get(i).id = currentId;
+                    properties.get(i).resource = "";
 
                 }
 
             }
         }
         System.out.println(properties);
-        return properties;
+        return properties; // GAUNAMAS IVYKIO PAVADINIMAS, ID ir RESURSU KIEKIS
     }
 
 }
@@ -349,8 +435,17 @@ class ActivityAttributes {
 class ActivityProperties {
     String name;
     String duration;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     String id;
-    ArrayList<String> resources;
+    String resource;
 }
 
 class AllProbabilities {
