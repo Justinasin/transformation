@@ -142,13 +142,6 @@ class ResourcesQuantity {
     String resourceQuantity;
 }
 
-class UnikaliuIvikiuResursai {
-
-    String ivykis;
-    String resursas;
-
-
-}
 
 class Duration {
 
@@ -180,7 +173,6 @@ class Duration {
         HashMap<String, Integer> veikliuTrukmiuSumos = new HashMap<>(); //veiklu trukmiu sumos
         HashMap<String, Integer> veikluVyksmuKiekiai = new HashMap<>(); //veiklu kiekiai
         ArrayList<String> uniqueEvents = new ArrayList<>();
-        ArrayList<UnikaliuIvikiuResursai> uniq = new ArrayList<>();
 
         NodeList nodeList = document.getElementsByTagName("trace");
 
@@ -193,8 +185,6 @@ class Duration {
             status.clear();
             Element element = (Element) nodeList.item(k);
             NodeList stringList = element.getElementsByTagName("string");
-            NodeList eventList = element.getElementsByTagName("event");
-
 
             NodeList dateList = element.getElementsByTagName("date");
 
@@ -221,39 +211,6 @@ class Duration {
                     uniqueEvents.add(ivykisI);
                 }
             }
-
-            /*ArrayList<UnikaliuIvikiuResursai> listOfEvents = new ArrayList<>();
-            String resourceNameOfNode = "";
-            String conceptNameOfNode = "";
-            int m = 0;
-
-            loop:
-            for (int i = 0; i < uniqueEvents.size(); i++) {
-
-                for (int x = 0, size = eventList.getLength(); x < size; x++) {
-                    NodeList childList = eventList.item(x).getChildNodes(); // VIENO IVYKIO VISI VAIKAI
-                    for (int j = 0; j < childList.getLength(); j++) { // ITERUOJAME PER VAIKU SARASA
-                        Node childNode = childList.item(j); // VIENAS VAIKAS
-                        String childNodeName = childNode.getNodeName();
-                        if ("string".equals(childNodeName)) {
-                            if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("org:resource")) { //klaida
-                                resourceNameOfNode = childNode.getAttributes().getNamedItem("value").getNodeValue();
-
-                            }
-                            if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name") || childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals(uniqueEvents.get(i))) {
-                                conceptNameOfNode = childList.item(j).getAttributes().getNamedItem("value").getNodeValue();
-                                ArrayList<UnikaliuIvikiuResursai> u = new ArrayList<>();
-
-                                listOfEvents.get(m).resursas = resourceNameOfNode;
-                                m++;
-                                continue loop;
-                            }
-                        }
-                    }
-                }
-            }
-            System.out.println(listOfEvents);*/
-
 
             //--- Get all times of every event in trace ---//
 
@@ -312,7 +269,6 @@ class Duration {
                     }
                 }
 
-
             }
         }
 
@@ -369,7 +325,7 @@ class ActivityAttributes {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\Users\\Justelio\\Desktop\\test\\07735e1b-95a6-4405-9182-1ac672a482b3\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair-without-BPSim\\Repair\\07735e1b-95a6-4405-9182-1ac672a482b3\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -441,20 +397,15 @@ class ActivityAttributes {
 
         System.out.println(properties);
 
-        // REIKIA PANAUDOTI LEVENŠTEINO ATSTUMA IR VISUS RESURSU PAVADINIMUS PERVADINTI I BENDRINI PAVADINIMA
-        // PATIKRINTI resQuantity SU properties
-
-
-        for (int i = 0;i<properties.size();i++){
+        for (int i = 0; i < properties.size(); i++) {
             String dabartinisRes = properties.get(i).resource;
-            for (int j = 0;j<resQuantity.size();j++){
+            for (int j = 0; j < resQuantity.size(); j++) {
                 String kitasRes = resQuantity.get(j).resourceName;
-                if(LevenshteinDistance.getDefaultInstance().apply(kitasRes,dabartinisRes) < 3) {
+                if (LevenshteinDistance.getDefaultInstance().apply(kitasRes, dabartinisRes) < 3) {
                     properties.get(i).resource = kitasRes;
                 }
             }
         }
-
 
 
         return properties; // GAUNAMAS IVYKIO PAVADINIMAS, ID, TRUKME, RESURSAS
@@ -482,7 +433,7 @@ class AllProbabilities {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\Users\\Justelio\\Desktop\\test\\07735e1b-95a6-4405-9182-1ac672a482b3\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair-without-BPSim\\Repair\\07735e1b-95a6-4405-9182-1ac672a482b3\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -660,8 +611,9 @@ class AllProbabilities {
         for (String s : transitionNames) {
             TransitionProbability prob = new TransitionProbability();
             prob.transitionId = s;
-
-            prob.probability = String.format("%.2f", transitionProbabilities.get(s));
+            String pr = String.format("%.2f", transitionProbabilities.get(s));
+            String p = pr.replaceAll(",", ".");
+            prob.probability = p;
             probs.add(prob);
         }
         System.out.println(transitionProbabilities);
@@ -685,8 +637,12 @@ class XmlGenerator {
 
         try {
 
+            // INICIUOJAMAS FAILO KURIMAS
+
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+            // STANDARTINIAI XML BPSimData FAILO ELEMENTAI
 
             // BPSimData elements
             Document doc = docBuilder.newDocument();
@@ -741,24 +697,7 @@ class XmlGenerator {
             Element PropertyParameters1 = doc.createElement("ns1:PropertyParameters");
             ScenarioParameters.appendChild(PropertyParameters1);
 
-            // BUS DEDAMAS I LOOP
-
-          /* // ElementParameters1 elements
-            Element ElementParameters1 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters1);
-
-            // set attribute to ElementParameters1 element
-            Attr ElementParameters11 = doc.createAttribute("elementRef");
-            ElementParameters11.setValue("Id_4c71c2ff-4b98-44fc-a66a-e5ab640832f7");
-            ElementParameters1.setAttributeNode(ElementParameters11);
-
-            // PropertyParameters2 elements
-            Element PropertyParameters2 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters1.appendChild(PropertyParameters2);*/
-
-
-            //nuo čia turi buti loop pasiskirstymo tikimybems
-
+            // PRASIDEDA LOOP PASIRINKIMO MAZGU TIKIMYBEMS
 
             for (int i = 0; i < probs.size(); i++) {
 
@@ -793,6 +732,7 @@ class XmlGenerator {
 
             }
 
+            // PRASIDEDA LOOP RESURSU APRASYMUI
 
             for (int i = 0; i < resQ.size(); i++) {
 
@@ -827,8 +767,10 @@ class XmlGenerator {
                 ElementParameters4.appendChild(PropertyParameters5);
             }
 
-            for (int j = 0;j<properties.size();j++){
-                if (properties.get(j).duration.equals("0")){
+            // PRASIDEDA LOOP, KURIS SUGENERUOJA VEIKLU ID, TRUKME BEI PRIDEDA RESURSA
+
+            for (int j = 0; j < properties.size(); j++) {
+                if (properties.get(j).duration.equals("0")) {
 
                     // ElementParameters110 elements
                     Element ElementParameters110 = doc.createElement("ns1:ElementParameters");
@@ -836,7 +778,7 @@ class XmlGenerator {
 
                     // set attribute to ElementParameters110 elements
                     Attr ElementParameters111 = doc.createAttribute("elementRef");
-                    ElementParameters111.setValue("Id_"+properties.get(j).id);
+                    ElementParameters111.setValue("Id_" + properties.get(j).id);
                     ElementParameters110.setAttributeNode(ElementParameters111);
 
                     // PropertyParameters12 elements
@@ -845,7 +787,7 @@ class XmlGenerator {
 
                 }
 
-                if (!properties.get(j).duration.equals("0")){
+                if (!properties.get(j).duration.equals("0")) {
 
                     // ElementParameters6 elements
                     Element ElementParameters6 = doc.createElement("ns1:ElementParameters");
@@ -853,7 +795,7 @@ class XmlGenerator {
 
                     // set attribute to ElementParameters6 elements
                     Attr ElementParameters61 = doc.createAttribute("elementRef");
-                    ElementParameters61.setValue("Id_"+properties.get(j).id);
+                    ElementParameters61.setValue("Id_" + properties.get(j).id);
                     ElementParameters6.setAttributeNode(ElementParameters61);
 
                     // TimeParameters1 elements
@@ -895,7 +837,7 @@ class XmlGenerator {
 
                     // set attribute to DurationParameter2 elements
                     Attr DurationParameter21 = doc.createAttribute("value");
-                    DurationParameter21.setValue("PT"+properties.get(j).duration+"M");
+                    DurationParameter21.setValue("PT" + properties.get(j).duration + "M");
                     DurationParameter2.setAttributeNode(DurationParameter21);
 
 
@@ -923,7 +865,7 @@ class XmlGenerator {
 
                     // set attribute to ExpressionParameter1 elements
                     Attr ExpressionParameter11 = doc.createAttribute("value");
-                    ExpressionParameter11.setValue("bpsim:getResource(\""+properties.get(j).resource+"\",1)");
+                    ExpressionParameter11.setValue("bpsim:getResource(\"" + properties.get(j).resource + "\",1)");
                     ExpressionParameter1.setAttributeNode(ExpressionParameter11);
 
                     // PropertyParameters7 elements
@@ -933,489 +875,12 @@ class XmlGenerator {
                 }
             }
 
-           // BAIGIASI LOOPAS
+            // IRASO TURINI I XML FAILA
 
-           /* // ElementParameters6 elements
-            Element ElementParameters6 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters6);
-
-            // set attribute to ElementParameters6 elements
-            Attr ElementParameters61 = doc.createAttribute("elementRef");
-            ElementParameters61.setValue("Id_477c3e9d-6c58-4d23-93ca-71fe9f30d8e4");
-            ElementParameters6.setAttributeNode(ElementParameters61);
-
-            // TimeParameters1 elements
-            Element TimeParameters1 = doc.createElement("ns1:TimeParameters");
-            ElementParameters6.appendChild(TimeParameters1);
-
-            // ProcessingTime1 elements
-            Element ProcessingTime1 = doc.createElement("ns1:ProcessingTime");
-            TimeParameters1.appendChild(ProcessingTime1);
-
-            // ResultRequest1 elements
-            Element ResultRequest1 = doc.createElement("ns1:ResultRequest");
-            ResultRequest1.appendChild(doc.createTextNode("min"));
-            ProcessingTime1.appendChild(ResultRequest1);
-
-            // ResultRequest2 elements
-            Element ResultRequest2 = doc.createElement("ns1:ResultRequest");
-            ResultRequest2.appendChild(doc.createTextNode("max"));
-            ProcessingTime1.appendChild(ResultRequest2);
-
-            // ResultRequest3 elements
-            Element ResultRequest3 = doc.createElement("ns1:ResultRequest");
-            ResultRequest3.appendChild(doc.createTextNode("mean"));
-            ProcessingTime1.appendChild(ResultRequest3);
-
-            // ResultRequest4 elements
-            Element ResultRequest4 = doc.createElement("ns1:ResultRequest");
-            ResultRequest4.appendChild(doc.createTextNode("count"));
-            ProcessingTime1.appendChild(ResultRequest4);
-
-            // ResultRequest5 elements
-            Element ResultRequest5 = doc.createElement("ns1:ResultRequest");
-            ResultRequest5.appendChild(doc.createTextNode("sum"));
-            ProcessingTime1.appendChild(ResultRequest5);
-
-            // DurationParameter2 elements
-            Element DurationParameter2 = doc.createElement("ns1:DurationParameter");
-            ProcessingTime1.appendChild(DurationParameter2);
-
-            // set attribute to DurationParameter2 elements
-            Attr DurationParameter21 = doc.createAttribute("value");
-            DurationParameter21.setValue("PT10M");
-            DurationParameter2.setAttributeNode(DurationParameter21);
-
-
-            // ResourceParameters3 elements
-            Element ResourceParameters3 = doc.createElement("ns1:ResourceParameters");
-            ElementParameters6.appendChild(ResourceParameters3);
-
-            // Selection1 elements
-            Element Selection1 = doc.createElement("ns1:Selection");
-            ResourceParameters3.appendChild(Selection1);
-
-            // ResultRequest6 elements
-            Element ResultRequest6 = doc.createElement("ns1:ResultRequest");
-            ResultRequest6.appendChild(doc.createTextNode("min"));
-            Selection1.appendChild(ResultRequest6);
-
-            // ResultRequest7 elements
-            Element ResultRequest7 = doc.createElement("ns1:ResultRequest");
-            ResultRequest7.appendChild(doc.createTextNode("max"));
-            Selection1.appendChild(ResultRequest7);
-
-            // ExpressionParameter1 elements
-            Element ExpressionParameter1 = doc.createElement("ns1:ExpressionParameter");
-            Selection1.appendChild(ExpressionParameter1);
-
-            // set attribute to ExpressionParameter1 elements
-            Attr ExpressionParameter11 = doc.createAttribute("value");
-            ExpressionParameter11.setValue("bpsim:getResource(\"Tester\",1)");
-            ExpressionParameter1.setAttributeNode(ExpressionParameter11);
-
-            // PropertyParameters7 elements
-            Element PropertyParameters7 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters6.appendChild(PropertyParameters7);
-
-            // ElementParameters7 elements
-            Element ElementParameters7 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters7);
-
-
-
-            // set attribute to ElementParameters7 elements
-            Attr ElementParameters71 = doc.createAttribute("elementRef");
-            ElementParameters71.setValue("Id_56e28358-745e-4bf1-a602-6ae9f3133ae0");
-            ElementParameters7.setAttributeNode(ElementParameters71);
-
-            // TimeParameters2 elements
-            Element TimeParameters2 = doc.createElement("ns1:TimeParameters");
-            ElementParameters7.appendChild(TimeParameters2);
-
-            // ProcessingTime2 elements
-            Element ProcessingTime2 = doc.createElement("ns1:ProcessingTime");
-            TimeParameters2.appendChild(ProcessingTime2);
-
-            // ResultRequest8 elements
-            Element ResultRequest8 = doc.createElement("ns1:ResultRequest");
-            ResultRequest8.appendChild(doc.createTextNode("min"));
-            ProcessingTime2.appendChild(ResultRequest8);
-
-            // ResultRequest9 elements
-            Element ResultRequest9 = doc.createElement("ns1:ResultRequest");
-            ResultRequest9.appendChild(doc.createTextNode("max"));
-            ProcessingTime2.appendChild(ResultRequest9);
-
-            // ResultRequest10 elements
-            Element ResultRequest10 = doc.createElement("ns1:ResultRequest");
-            ResultRequest10.appendChild(doc.createTextNode("mean"));
-            ProcessingTime2.appendChild(ResultRequest10);
-
-            // ResultRequest11 elements
-            Element ResultRequest11 = doc.createElement("ns1:ResultRequest");
-            ResultRequest11.appendChild(doc.createTextNode("count"));
-            ProcessingTime2.appendChild(ResultRequest11);
-
-            // ResultRequest12 elements
-            Element ResultRequest12 = doc.createElement("ns1:ResultRequest");
-            ResultRequest12.appendChild(doc.createTextNode("sum"));
-            ProcessingTime2.appendChild(ResultRequest12);
-
-            // DurationParameter3 elements
-            Element DurationParameter3 = doc.createElement("ns1:DurationParameter");
-            ProcessingTime2.appendChild(DurationParameter3);
-
-            // set attribute to DurationParameter3 elements
-            Attr DurationParameter31 = doc.createAttribute("value");
-            DurationParameter31.setValue("PT20M");
-            DurationParameter3.setAttributeNode(DurationParameter31);
-
-
-            // ResourceParameters4 elements
-            Element ResourceParameters4 = doc.createElement("ns1:ResourceParameters");
-            ElementParameters7.appendChild(ResourceParameters4);
-
-            // Selection2 elements
-            Element Selection2 = doc.createElement("ns1:Selection");
-            ResourceParameters4.appendChild(Selection2);
-
-            // ResultRequest13 elements
-            Element ResultRequest13 = doc.createElement("ns1:ResultRequest");
-            ResultRequest13.appendChild(doc.createTextNode("min"));
-            Selection2.appendChild(ResultRequest13);
-
-            // ResultRequest14 elements
-            Element ResultRequest14 = doc.createElement("ns1:ResultRequest");
-            ResultRequest14.appendChild(doc.createTextNode("max"));
-            Selection2.appendChild(ResultRequest14);
-
-            // ExpressionParameter2 elements
-            Element ExpressionParameter2 = doc.createElement("ns1:ExpressionParameter");
-            Selection2.appendChild(ExpressionParameter2);
-
-            // set attribute to ExpressionParameter2 elements
-            Attr ExpressionParameter21 = doc.createAttribute("value");
-            ExpressionParameter21.setValue("bpsim:getResource(\"Solver\",1)");
-            ExpressionParameter2.setAttributeNode(ExpressionParameter21);
-
-            // ElementParameters8 elements
-            Element ElementParameters8 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters8);
-
-            // PropertyParameters8 elements
-            Element PropertyParameters8 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters7.appendChild(PropertyParameters8);
-
-            // set attribute to ElementParameters8 elements
-            Attr ElementParameters81 = doc.createAttribute("elementRef");
-            ElementParameters81.setValue("Id_5d83490e-90d2-45a3-91e1-b06d06892dcb");
-            ElementParameters8.setAttributeNode(ElementParameters81);
-
-            // TimeParameters3 elements
-            Element TimeParameters3 = doc.createElement("ns1:TimeParameters");
-            ElementParameters8.appendChild(TimeParameters3);
-
-            // ProcessingTime3 elements
-            Element ProcessingTime3 = doc.createElement("ns1:ProcessingTime");
-            TimeParameters3.appendChild(ProcessingTime3);
-
-            // ResultRequest15 elements
-            Element ResultRequest15 = doc.createElement("ns1:ResultRequest");
-            ResultRequest15.appendChild(doc.createTextNode("min"));
-            ProcessingTime3.appendChild(ResultRequest15);
-
-            // ResultRequest16 elements
-            Element ResultRequest16 = doc.createElement("ns1:ResultRequest");
-            ResultRequest16.appendChild(doc.createTextNode("max"));
-            ProcessingTime3.appendChild(ResultRequest16);
-
-            // ResultRequest17 elements
-            Element ResultRequest17 = doc.createElement("ns1:ResultRequest");
-            ResultRequest17.appendChild(doc.createTextNode("mean"));
-            ProcessingTime3.appendChild(ResultRequest17);
-
-            // ResultRequest18 elements
-            Element ResultRequest18 = doc.createElement("ns1:ResultRequest");
-            ResultRequest18.appendChild(doc.createTextNode("count"));
-            ProcessingTime3.appendChild(ResultRequest18);
-
-            // ResultRequest19 elements
-            Element ResultRequest19 = doc.createElement("ns1:ResultRequest");
-            ResultRequest19.appendChild(doc.createTextNode("sum"));
-            ProcessingTime3.appendChild(ResultRequest19);
-
-            // DurationParameter4 elements
-            Element DurationParameter4 = doc.createElement("ns1:DurationParameter");
-            ProcessingTime3.appendChild(DurationParameter4);
-
-            // set attribute to DurationParameter4 elements
-            Attr DurationParameter41 = doc.createAttribute("value");
-            DurationParameter41.setValue("PT40M");
-            DurationParameter4.setAttributeNode(DurationParameter41);
-
-
-            // ResourceParameters5 elements
-            Element ResourceParameters5 = doc.createElement("ns1:ResourceParameters");
-            ElementParameters8.appendChild(ResourceParameters5);
-
-            // Selection3 elements
-            Element Selection3 = doc.createElement("ns1:Selection");
-            ResourceParameters5.appendChild(Selection3);
-
-            // ResultRequest20 elements
-            Element ResultRequest20 = doc.createElement("ns1:ResultRequest");
-            ResultRequest20.appendChild(doc.createTextNode("min"));
-            Selection3.appendChild(ResultRequest20);
-
-            // ResultRequest21 elements
-            Element ResultRequest21 = doc.createElement("ns1:ResultRequest");
-            ResultRequest21.appendChild(doc.createTextNode("max"));
-            Selection3.appendChild(ResultRequest21);
-
-            // ExpressionParameter3 elements
-            Element ExpressionParameter3 = doc.createElement("ns1:ExpressionParameter");
-            Selection3.appendChild(ExpressionParameter3);
-
-            // set attribute to ExpressionParameter3 elements
-            Attr ExpressionParameter31 = doc.createAttribute("value");
-            ExpressionParameter31.setValue("bpsim:getResource(\"Solver\",1)");
-            ExpressionParameter3.setAttributeNode(ExpressionParameter31);
-
-            // ElementParameters9 elements
-            Element ElementParameters9 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters9);
-
-            // PropertyParameters9 elements
-            Element PropertyParameters9 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters8.appendChild(PropertyParameters9);
-
-            // set attribute to ElementParameters9 elements
-            Attr ElementParameters91 = doc.createAttribute("elementRef");
-            ElementParameters91.setValue("Id_98229681-104a-4a22-a0ef-88573797c602");
-            ElementParameters9.setAttributeNode(ElementParameters91);
-
-            // TimeParameters4 elements
-            Element TimeParameters4 = doc.createElement("ns1:TimeParameters");
-            ElementParameters9.appendChild(TimeParameters4);
-
-            // ProcessingTime4 elements
-            Element ProcessingTime4 = doc.createElement("ns1:ProcessingTime");
-            TimeParameters4.appendChild(ProcessingTime4);
-
-            // ResultRequest22 elements
-            Element ResultRequest22 = doc.createElement("ns1:ResultRequest");
-            ResultRequest22.appendChild(doc.createTextNode("min"));
-            ProcessingTime4.appendChild(ResultRequest22);
-
-            // ResultRequest23 elements
-            Element ResultRequest23 = doc.createElement("ns1:ResultRequest");
-            ResultRequest23.appendChild(doc.createTextNode("max"));
-            ProcessingTime4.appendChild(ResultRequest23);
-
-            // ResultRequest24 elements
-            Element ResultRequest24 = doc.createElement("ns1:ResultRequest");
-            ResultRequest24.appendChild(doc.createTextNode("mean"));
-            ProcessingTime4.appendChild(ResultRequest24);
-
-            // ResultRequest25 elements
-            Element ResultRequest25 = doc.createElement("ns1:ResultRequest");
-            ResultRequest25.appendChild(doc.createTextNode("count"));
-            ProcessingTime4.appendChild(ResultRequest25);
-
-            // ResultRequest26 elements
-            Element ResultRequest26 = doc.createElement("ns1:ResultRequest");
-            ResultRequest26.appendChild(doc.createTextNode("sum"));
-            ProcessingTime4.appendChild(ResultRequest26);
-
-            // DurationParameter5 elements
-            Element DurationParameter5 = doc.createElement("ns1:DurationParameter");
-            ProcessingTime4.appendChild(DurationParameter5);
-
-            // set attribute to DurationParameter5 elements
-            Attr DurationParameter51 = doc.createAttribute("value");
-            DurationParameter51.setValue("PT15M");
-            DurationParameter5.setAttributeNode(DurationParameter51);
-
-            // ResourceParameters6 elements
-            Element ResourceParameters6 = doc.createElement("ns1:ResourceParameters");
-            ElementParameters9.appendChild(ResourceParameters6);
-
-            // Selection4 elements
-            Element Selection4 = doc.createElement("ns1:Selection");
-            ResourceParameters6.appendChild(Selection4);
-
-            // ResultRequest27 elements
-            Element ResultRequest27 = doc.createElement("ns1:ResultRequest");
-            ResultRequest27.appendChild(doc.createTextNode("min"));
-            Selection4.appendChild(ResultRequest27);
-
-            // ResultRequest28 elements
-            Element ResultRequest28 = doc.createElement("ns1:ResultRequest");
-            ResultRequest28.appendChild(doc.createTextNode("max"));
-            Selection4.appendChild(ResultRequest28);
-
-            // ExpressionParameter4 elements
-            Element ExpressionParameter4 = doc.createElement("ns1:ExpressionParameter");
-            Selection4.appendChild(ExpressionParameter4);
-
-            // set attribute to ExpressionParameter4 elements
-            Attr ExpressionParameter41 = doc.createAttribute("value");
-            ExpressionParameter41.setValue("bpsim:getResource(\"Tester\",1)");
-            ExpressionParameter4.setAttributeNode(ExpressionParameter41);
-
-            // PropertyParameters10 elements
-            Element PropertyParameters10 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters9.appendChild(PropertyParameters10);
-
-            // ElementParameters10 elements
-            Element ElementParameters10 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters10);
-
-            // set attribute to ElementParameters10 elements
-            Attr ElementParameters101 = doc.createAttribute("elementRef");
-            ElementParameters101.setValue("Id_5586ee57-8143-4dc9-a502-ddcabfd0547e");
-            ElementParameters10.setAttributeNode(ElementParameters101);
-
-            // TimeParameters5 elements
-            Element TimeParameters5 = doc.createElement("ns1:TimeParameters");
-            ElementParameters10.appendChild(TimeParameters5);
-
-            // ProcessingTime5 elements
-            Element ProcessingTime5 = doc.createElement("ns1:ProcessingTime");
-            TimeParameters5.appendChild(ProcessingTime5);
-
-            // ResultRequest29 elements
-            Element ResultRequest29 = doc.createElement("ns1:ResultRequest");
-            ResultRequest29.appendChild(doc.createTextNode("min"));
-            ProcessingTime5.appendChild(ResultRequest29);
-
-            // ResultRequest30 elements
-            Element ResultRequest30 = doc.createElement("ns1:ResultRequest");
-            ResultRequest30.appendChild(doc.createTextNode("max"));
-            ProcessingTime5.appendChild(ResultRequest30);
-
-            // ResultRequest31 elements
-            Element ResultRequest31 = doc.createElement("ns1:ResultRequest");
-            ResultRequest31.appendChild(doc.createTextNode("mean"));
-            ProcessingTime5.appendChild(ResultRequest31);
-
-            // ResultRequest32 elements
-            Element ResultRequest32 = doc.createElement("ns1:ResultRequest");
-            ResultRequest32.appendChild(doc.createTextNode("count"));
-            ProcessingTime5.appendChild(ResultRequest32);
-
-            // ResultRequest33 elements
-            Element ResultRequest33 = doc.createElement("ns1:ResultRequest");
-            ResultRequest33.appendChild(doc.createTextNode("sum"));
-            ProcessingTime5.appendChild(ResultRequest33);
-
-            // DurationParameter6 elements
-            Element DurationParameter6 = doc.createElement("ns1:DurationParameter");
-            ProcessingTime5.appendChild(DurationParameter6);
-
-            // set attribute to DurationParameter6 elements
-            Attr DurationParameter61 = doc.createAttribute("value");
-            DurationParameter61.setValue("PT10M");
-            DurationParameter6.setAttributeNode(DurationParameter61);
-
-
-            // ResourceParameters7 elements
-            Element ResourceParameters7 = doc.createElement("ns1:ResourceParameters");
-            ElementParameters10.appendChild(ResourceParameters7);
-
-            // Selection5 elements
-            Element Selection5 = doc.createElement("ns1:Selection");
-            ResourceParameters7.appendChild(Selection5);
-
-            // ResultRequest34 elements
-            Element ResultRequest34 = doc.createElement("ns1:ResultRequest");
-            ResultRequest34.appendChild(doc.createTextNode("min"));
-            Selection5.appendChild(ResultRequest34);
-
-            // ResultRequest35 elements
-            Element ResultRequest35 = doc.createElement("ns1:ResultRequest");
-            ResultRequest35.appendChild(doc.createTextNode("max"));
-            Selection5.appendChild(ResultRequest35);
-
-            // ExpressionParameter5 elements
-            Element ExpressionParameter5 = doc.createElement("ns1:ExpressionParameter");
-            Selection5.appendChild(ExpressionParameter5);
-
-            // set attribute to ExpressionParameter5 elements
-            Attr ExpressionParameter51 = doc.createAttribute("value");
-            ExpressionParameter51.setValue("bpsim:getResource(\"Solver\",1)");
-            ExpressionParameter5.setAttributeNode(ExpressionParameter51);
-
-            // PropertyParameters11 elements
-            Element PropertyParameters11 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters10.appendChild(PropertyParameters11);
-
-            // ElementParameters110 elements
-            Element ElementParameters110 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters110);
-
-            // set attribute to ElementParameters110 elements
-            Attr ElementParameters111 = doc.createAttribute("elementRef");
-            ElementParameters111.setValue("Id_64665022-ea09-4248-8a1f-2a3a464e5c71");
-            ElementParameters110.setAttributeNode(ElementParameters111);
-
-
-            // PropertyParameters12 elements
-            Element PropertyParameters12 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters110.appendChild(PropertyParameters12);
-
-            // ElementParameters120 elements
-            Element ElementParameters120 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters120);
-
-            // set attribute to ElementParameters120 elements
-            Attr ElementParameters121 = doc.createAttribute("elementRef");
-            ElementParameters121.setValue("Id_dc3040e3-a968-45dc-bdb6-a76894eb31fc");
-            ElementParameters120.setAttributeNode(ElementParameters121);
-
-
-            // PropertyParameters13 elements
-            Element PropertyParameters13 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters120.appendChild(PropertyParameters13);
-
-            // ElementParameters130 elements
-            Element ElementParameters130 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters130);
-
-            // set attribute to ElementParameters130 elements
-            Attr ElementParameters131 = doc.createAttribute("elementRef");
-            ElementParameters131.setValue("Id_ccd37ceb-b8ab-4ce9-a6fc-e0ddf7f40bc4");
-            ElementParameters130.setAttributeNode(ElementParameters131);
-
-
-            // PropertyParameters14 elements
-            Element PropertyParameters14 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters130.appendChild(PropertyParameters14);
-
-            // ElementParameters140 elements
-            Element ElementParameters140 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters140);
-
-            // set attribute to ElementParameters140 elements
-            Attr ElementParameters141 = doc.createAttribute("elementRef");
-            ElementParameters141.setValue("Id_3e3d3b23-fbcf-49bb-8b3d-7a06e4391f7a");
-            ElementParameters140.setAttributeNode(ElementParameters141);
-
-
-            // PropertyParameters15 elements
-            Element PropertyParameters15 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters140.appendChild(PropertyParameters15);*/
-
-
-            // write the content into xml file
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File("C:\\Users\\Justelio\\Desktop\\file.xml"));
-
-            // Output to console for testing
-            // StreamResult result = new StreamResult(System.out);
 
             transformer.transform(source, result);
 
