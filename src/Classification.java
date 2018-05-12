@@ -147,22 +147,6 @@ class UnikaliuIvikiuResursai {
     String ivykis;
     String resursas;
 
-   /* public String getIvykis(){
-        return ivykis;
-    }
-
-    public void setIvykis(String ivykis){
-        this.ivykis=ivykis;
-    }
-
-    public String getResursas(){
-        return resursas;
-    }
-
-    public void setResursas(String resursas){
-        this.resursas=resursas;
-    }*/
-
 
 }
 
@@ -372,6 +356,8 @@ class TransitionProbability {
 class ActivityAttributes {
     public static ArrayList<ActivityProperties> generateActivityAttributes() throws ParseException {
 
+        ArrayList<ResourcesQuantity> resQuantity = ResourcesCalculation.getResourceCalculations();
+
         ArrayList<ActivityProperties> properties = Duration.getDurations();
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -454,7 +440,24 @@ class ActivityAttributes {
         }
 
         System.out.println(properties);
-        return properties; // GAUNAMAS IVYKIO PAVADINIMAS, ID ir TRUKME
+
+        // REIKIA PANAUDOTI LEVENŠTEINO ATSTUMA IR VISUS RESURSU PAVADINIMUS PERVADINTI I BENDRINI PAVADINIMA
+        // PATIKRINTI resQuantity SU properties
+
+
+        for (int i = 0;i<properties.size();i++){
+            String dabartinisRes = properties.get(i).resource;
+            for (int j = 0;j<resQuantity.size();j++){
+                String kitasRes = resQuantity.get(j).resourceName;
+                if(LevenshteinDistance.getDefaultInstance().apply(kitasRes,dabartinisRes) < 3) {
+                    properties.get(i).resource = kitasRes;
+                }
+            }
+        }
+
+
+
+        return properties; // GAUNAMAS IVYKIO PAVADINIMAS, ID, TRUKME, RESURSAS
     }
 
 }
@@ -674,10 +677,11 @@ class AllProbabilities {
 class XmlGenerator {
 
 
-    public static void generateXml() {
+    public static void generateXml() throws ParseException {
 
         ArrayList<TransitionProbability> probs = AllProbabilities.getAllProbabilities();
         ArrayList<ResourcesQuantity> resQ = ResourcesCalculation.getResourceCalculations();
+        ArrayList<ActivityProperties> properties = ActivityAttributes.generateActivityAttributes();
 
         try {
 
@@ -737,7 +741,9 @@ class XmlGenerator {
             Element PropertyParameters1 = doc.createElement("ns1:PropertyParameters");
             ScenarioParameters.appendChild(PropertyParameters1);
 
-            // ElementParameters1 elements
+            // BUS DEDAMAS I LOOP
+
+          /* // ElementParameters1 elements
             Element ElementParameters1 = doc.createElement("ns1:ElementParameters");
             Scenario.appendChild(ElementParameters1);
 
@@ -748,7 +754,7 @@ class XmlGenerator {
 
             // PropertyParameters2 elements
             Element PropertyParameters2 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters1.appendChild(PropertyParameters2);
+            ElementParameters1.appendChild(PropertyParameters2);*/
 
 
             //nuo čia turi buti loop pasiskirstymo tikimybems
@@ -786,101 +792,7 @@ class XmlGenerator {
                 ElementParameters2.appendChild(PropertyParameters3);
 
             }
-/*
 
-
-
-		    Element ElementParameters2 = doc.createElement("ns1:ElementParameters");
-            Scenario.appendChild(ElementParameters2);
-
-            // set attribute to ElementParameters2 elements
-            Attr ElementParameters21 = doc.createAttribute("elementRef");
-            ElementParameters21.setValue("Id_3ac1ea1c-1349-4ff3-9c34-89ab9f3943bb");
-            ElementParameters2.setAttributeNode(ElementParameters21);
-
-            // ControlParameters1 elements
-            Element ControlParameters1 = doc.createElement("ns1:ControlParameters");
-            ElementParameters2.appendChild(ControlParameters1);
-
-            // Probability1 elements
-            Element Probability1 = doc.createElement("ns1:Probability");
-            ControlParameters1.appendChild(Probability1);
-
-            // Floating1 elements
-            Element FloatingParameter1 = doc.createElement("ns1:FloatingParameter");
-            Probability1.appendChild(FloatingParameter1);
-
-            // set attribute to Floating1 element
-            Attr FloatingParameter11 = doc.createAttribute("value");
-            FloatingParameter11.setValue("0.33");
-            FloatingParameter1.setAttributeNode(FloatingParameter11);
-
-            // PropertyParameters3 elements
-            Element PropertyParameters3 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters2.appendChild(PropertyParameters3);
-
-
-             */
-
-            // ElementParameters2 elements
-//            Element ElementParameters2 = doc.createElement("ns1:ElementParameters");
-//            Scenario.appendChild(ElementParameters2);
-//
-//            // set attribute to ElementParameters2 elements ž
-//            Attr ElementParameters21 = doc.createAttribute("elementRef");
-//            ElementParameters21.setValue("Id_3ac1ea1c-1349-4ff3-9c34-89ab9f3943bb");
-//            ElementParameters2.setAttributeNode(ElementParameters21);
-//
-//            // ControlParameters1 elements
-//            Element ControlParameters1 = doc.createElement("ns1:ControlParameters");
-//            ElementParameters2.appendChild(ControlParameters1);
-//
-//            // Probability1 elements
-//            Element Probability1 = doc.createElement("ns1:Probability");
-//            ControlParameters1.appendChild(Probability1);
-//
-//            // Floating1 elements
-//            Element FloatingParameter1 = doc.createElement("ns1:FloatingParameter");
-//            Probability1.appendChild(FloatingParameter1);
-//
-//            // set attribute to Floating1 element
-//            Attr FloatingParameter11 = doc.createAttribute("value");
-//            FloatingParameter11.setValue("0.33");
-//            FloatingParameter1.setAttributeNode(FloatingParameter11);
-//
-//            // PropertyParameters3 elements
-//            Element PropertyParameters3 = doc.createElement("ns1:PropertyParameters");
-//            ElementParameters2.appendChild(PropertyParameters3);
-//
-//            // ElementParameters3 elements
-//            Element ElementParameters3 = doc.createElement("ns1:ElementParameters");
-//            Scenario.appendChild(ElementParameters3);
-//
-//            // set attribute to ElementParameters2 elements
-//            Attr ElementParameters31 = doc.createAttribute("elementRef");
-//            ElementParameters31.setValue("Id_3eb60779-086b-48fa-9981-1005e3461871");
-//            ElementParameters3.setAttributeNode(ElementParameters31);
-//
-//            // ControlParameters2 elements
-//            Element ControlParameters2 = doc.createElement("ns1:ControlParameters");
-//            ElementParameters3.appendChild(ControlParameters2);
-//
-//            // Probability2 elements
-//            Element Probability2 = doc.createElement("ns1:Probability");
-//            ControlParameters2.appendChild(Probability2);
-//
-//            // Floating2 elements
-//            Element FloatingParameter2 = doc.createElement("ns1:FloatingParameter");
-//            Probability2.appendChild(FloatingParameter2);
-//
-//            // set attribute to Floating2 element
-//            Attr FloatingParameter21 = doc.createAttribute("value");
-//            FloatingParameter21.setValue("0.67");
-//            FloatingParameter2.setAttributeNode(FloatingParameter21);
-//
-//            // PropertyParameters4 elements
-//            Element PropertyParameters4 = doc.createElement("ns1:PropertyParameters");
-//            ElementParameters3.appendChild(PropertyParameters4);
 
             for (int i = 0; i < resQ.size(); i++) {
 
@@ -915,8 +827,115 @@ class XmlGenerator {
                 ElementParameters4.appendChild(PropertyParameters5);
             }
 
+            for (int j = 0;j<properties.size();j++){
+                if (properties.get(j).duration.equals("0")){
 
-            // ElementParameters6 elements
+                    // ElementParameters110 elements
+                    Element ElementParameters110 = doc.createElement("ns1:ElementParameters");
+                    Scenario.appendChild(ElementParameters110);
+
+                    // set attribute to ElementParameters110 elements
+                    Attr ElementParameters111 = doc.createAttribute("elementRef");
+                    ElementParameters111.setValue("Id_"+properties.get(j).id);
+                    ElementParameters110.setAttributeNode(ElementParameters111);
+
+                    // PropertyParameters12 elements
+                    Element PropertyParameters12 = doc.createElement("ns1:PropertyParameters");
+                    ElementParameters110.appendChild(PropertyParameters12);
+
+                }
+
+                if (!properties.get(j).duration.equals("0")){
+
+                    // ElementParameters6 elements
+                    Element ElementParameters6 = doc.createElement("ns1:ElementParameters");
+                    Scenario.appendChild(ElementParameters6);
+
+                    // set attribute to ElementParameters6 elements
+                    Attr ElementParameters61 = doc.createAttribute("elementRef");
+                    ElementParameters61.setValue("Id_"+properties.get(j).id);
+                    ElementParameters6.setAttributeNode(ElementParameters61);
+
+                    // TimeParameters1 elements
+                    Element TimeParameters1 = doc.createElement("ns1:TimeParameters");
+                    ElementParameters6.appendChild(TimeParameters1);
+
+                    // ProcessingTime1 elements
+                    Element ProcessingTime1 = doc.createElement("ns1:ProcessingTime");
+                    TimeParameters1.appendChild(ProcessingTime1);
+
+                    // ResultRequest1 elements
+                    Element ResultRequest1 = doc.createElement("ns1:ResultRequest");
+                    ResultRequest1.appendChild(doc.createTextNode("min"));
+                    ProcessingTime1.appendChild(ResultRequest1);
+
+                    // ResultRequest2 elements
+                    Element ResultRequest2 = doc.createElement("ns1:ResultRequest");
+                    ResultRequest2.appendChild(doc.createTextNode("max"));
+                    ProcessingTime1.appendChild(ResultRequest2);
+
+                    // ResultRequest3 elements
+                    Element ResultRequest3 = doc.createElement("ns1:ResultRequest");
+                    ResultRequest3.appendChild(doc.createTextNode("mean"));
+                    ProcessingTime1.appendChild(ResultRequest3);
+
+                    // ResultRequest4 elements
+                    Element ResultRequest4 = doc.createElement("ns1:ResultRequest");
+                    ResultRequest4.appendChild(doc.createTextNode("count"));
+                    ProcessingTime1.appendChild(ResultRequest4);
+
+                    // ResultRequest5 elements
+                    Element ResultRequest5 = doc.createElement("ns1:ResultRequest");
+                    ResultRequest5.appendChild(doc.createTextNode("sum"));
+                    ProcessingTime1.appendChild(ResultRequest5);
+
+                    // DurationParameter2 elements
+                    Element DurationParameter2 = doc.createElement("ns1:DurationParameter");
+                    ProcessingTime1.appendChild(DurationParameter2);
+
+                    // set attribute to DurationParameter2 elements
+                    Attr DurationParameter21 = doc.createAttribute("value");
+                    DurationParameter21.setValue("PT"+properties.get(j).duration+"M");
+                    DurationParameter2.setAttributeNode(DurationParameter21);
+
+
+                    // ResourceParameters3 elements
+                    Element ResourceParameters3 = doc.createElement("ns1:ResourceParameters");
+                    ElementParameters6.appendChild(ResourceParameters3);
+
+                    // Selection1 elements
+                    Element Selection1 = doc.createElement("ns1:Selection");
+                    ResourceParameters3.appendChild(Selection1);
+
+                    // ResultRequest6 elements
+                    Element ResultRequest6 = doc.createElement("ns1:ResultRequest");
+                    ResultRequest6.appendChild(doc.createTextNode("min"));
+                    Selection1.appendChild(ResultRequest6);
+
+                    // ResultRequest7 elements
+                    Element ResultRequest7 = doc.createElement("ns1:ResultRequest");
+                    ResultRequest7.appendChild(doc.createTextNode("max"));
+                    Selection1.appendChild(ResultRequest7);
+
+                    // ExpressionParameter1 elements
+                    Element ExpressionParameter1 = doc.createElement("ns1:ExpressionParameter");
+                    Selection1.appendChild(ExpressionParameter1);
+
+                    // set attribute to ExpressionParameter1 elements
+                    Attr ExpressionParameter11 = doc.createAttribute("value");
+                    ExpressionParameter11.setValue("bpsim:getResource(\""+properties.get(j).resource+"\",1)");
+                    ExpressionParameter1.setAttributeNode(ExpressionParameter11);
+
+                    // PropertyParameters7 elements
+                    Element PropertyParameters7 = doc.createElement("ns1:PropertyParameters");
+                    ElementParameters6.appendChild(PropertyParameters7);
+
+                }
+            }
+
+           // BAIGIASI LOOPAS
+
+           /* // ElementParameters6 elements
             Element ElementParameters6 = doc.createElement("ns1:ElementParameters");
             Scenario.appendChild(ElementParameters6);
 
@@ -995,13 +1014,15 @@ class XmlGenerator {
             ExpressionParameter11.setValue("bpsim:getResource(\"Tester\",1)");
             ExpressionParameter1.setAttributeNode(ExpressionParameter11);
 
+            // PropertyParameters7 elements
+            Element PropertyParameters7 = doc.createElement("ns1:PropertyParameters");
+            ElementParameters6.appendChild(PropertyParameters7);
+
             // ElementParameters7 elements
             Element ElementParameters7 = doc.createElement("ns1:ElementParameters");
             Scenario.appendChild(ElementParameters7);
 
-            // PropertyParameters7 elements
-            Element PropertyParameters7 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters6.appendChild(PropertyParameters7);
+
 
             // set attribute to ElementParameters7 elements
             Attr ElementParameters71 = doc.createAttribute("elementRef");
@@ -1384,7 +1405,7 @@ class XmlGenerator {
 
             // PropertyParameters15 elements
             Element PropertyParameters15 = doc.createElement("ns1:PropertyParameters");
-            ElementParameters140.appendChild(PropertyParameters15);
+            ElementParameters140.appendChild(PropertyParameters15);*/
 
 
             // write the content into xml file
