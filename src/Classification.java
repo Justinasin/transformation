@@ -39,6 +39,12 @@ public class Classification {
         XmlGenerator xml = new XmlGenerator();
         xml.generateXml();
 
+        CreateParticipantFile participant = new CreateParticipantFile();
+        participant.generateParticipantXml();
+
+        CreateDiagramFile diagram = new CreateDiagramFile();
+        diagram.generateDiagramXml();
+
 
     }
 
@@ -325,7 +331,7 @@ class ActivityAttributes {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair-without-BPSim\\Repair\\07735e1b-95a6-4405-9182-1ac672a482b3\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair-05-17d. without simulation\\Repair-05-17d without simulation\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -422,6 +428,8 @@ class ActivityProperties {
 
 class AllProbabilities {
 
+    public static String startEventId;
+
     public static ArrayList<TransitionProbability> getAllProbabilities() {
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -433,7 +441,7 @@ class AllProbabilities {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair-without-BPSim\\Repair\\07735e1b-95a6-4405-9182-1ac672a482b3\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair-05-17d. without simulation\\Repair-05-17d without simulation\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -460,6 +468,20 @@ class AllProbabilities {
 
         }
 
+
+        loop:
+        for (int x = 0, size = activityList.getLength(); x < size; x++) {
+
+            if (activityList.item(x).getAttributes().getNamedItem("Name").getNodeValue().equals("")) {
+
+                startEventId = activityList.item(x).getAttributes().getNamedItem("Id").getNodeValue();
+                System.out.println(startEventId);
+                break loop;
+            }
+
+        }
+
+
         DocumentBuilderFactory dbf1 = DocumentBuilderFactory.newInstance();
         DocumentBuilder db1 = null;
 
@@ -478,7 +500,7 @@ class AllProbabilities {
         }
         NodeList traceList = document1.getElementsByTagName("trace");
 
-        HashMap<String, Float> transitionProbabilities = new HashMap<String, Float>();
+        HashMap<String, Float> transitionProbabilities = new HashMap<>();
         for (int a = 0; a < decisions.size(); a++) {
 
             String currentDecision = decisions.get(a);
@@ -623,6 +645,10 @@ class AllProbabilities {
 
         return probs; //grazina transitionId ir tikimybe
     }
+
+    public String getStartEventId() {
+        return startEventId;
+    }
 }
 
 
@@ -634,6 +660,8 @@ class XmlGenerator {
         ArrayList<TransitionProbability> probs = AllProbabilities.getAllProbabilities();
         ArrayList<ResourcesQuantity> resQ = ResourcesCalculation.getResourceCalculations();
         ArrayList<ActivityProperties> properties = ActivityAttributes.generateActivityAttributes();
+
+        String StartEventId = AllProbabilities.startEventId;
 
         try {
 
@@ -685,13 +713,13 @@ class XmlGenerator {
             Scenario.appendChild(ScenarioParameters);
 
 
-            // Duration elements
+            /*// Duration elements
             Element Duration = doc.createElement("ns1:Duration");
             ScenarioParameters.appendChild(Duration);
 
             // DurationParameter elements
             Element DurationParameter = doc.createElement("ns1:DurationParameter");
-            Duration.appendChild(DurationParameter);
+            Duration.appendChild(DurationParameter);*/
 
             // PropertyParameters1 elements
             Element PropertyParameters1 = doc.createElement("ns1:PropertyParameters");
@@ -872,8 +900,68 @@ class XmlGenerator {
                     Element PropertyParameters7 = doc.createElement("ns1:PropertyParameters");
                     ElementParameters6.appendChild(PropertyParameters7);
 
+
                 }
             }
+
+            // ElementParameter blokas skirtas nurodyti veiklu pradzios intervalus ir didziausia ju kieki
+
+            Element ElementParameters7 = doc.createElement("ns1:ElementParameters");
+            Scenario.appendChild(ElementParameters7);
+
+            // set attribute to ElementParameters6 elements
+            Attr ElementParameters71 = doc.createAttribute("elementRef");
+            ElementParameters71.setValue("Id_" + StartEventId);
+            ElementParameters7.setAttributeNode(ElementParameters71);
+
+            Element ControlParameters2 = doc.createElement("ns1:ControlParameters");
+            ElementParameters7.appendChild(ControlParameters2);
+
+            Element InterTriggerTimer1 = doc.createElement("ns1:InterTriggerTimer");
+            ControlParameters2.appendChild(InterTriggerTimer1);
+
+            // ResultRequest7 elements
+            Element ResultRequest7 = doc.createElement("ns1:ResultRequest");
+            ResultRequest7.appendChild(doc.createTextNode("min"));
+            InterTriggerTimer1.appendChild(ResultRequest7);
+
+            // ResultRequest8 elements
+            Element ResultRequest8 = doc.createElement("ns1:ResultRequest");
+            ResultRequest8.appendChild(doc.createTextNode("max"));
+            InterTriggerTimer1.appendChild(ResultRequest8);
+
+            // ResultRequest9 elements
+            Element ResultRequest9 = doc.createElement("ns1:ResultRequest");
+            ResultRequest9.appendChild(doc.createTextNode("mean"));
+            InterTriggerTimer1.appendChild(ResultRequest9);
+
+            // ResultRequest10 elements
+            Element ResultRequest10 = doc.createElement("ns1:ResultRequest");
+            ResultRequest10.appendChild(doc.createTextNode("sum"));
+            InterTriggerTimer1.appendChild(ResultRequest10);
+
+            // NumericParameter2 elements
+            Element NumericParameter2 = doc.createElement("ns1:NumericParameter");
+            InterTriggerTimer1.appendChild(NumericParameter2);
+
+            Attr NumericParameter21 = doc.createAttribute("value");
+            NumericParameter21.setValue("20");
+            NumericParameter2.setAttributeNode(NumericParameter21);
+
+            Element TriggerCount1 = doc.createElement("ns1:TriggerCount");
+            ControlParameters2.appendChild(TriggerCount1);
+
+            Element TriggerCount11 = doc.createElement("ns1:ResultRequest");
+            TriggerCount11.appendChild(doc.createTextNode("count"));
+            TriggerCount1.appendChild(TriggerCount11);
+
+            // NumericParameter3 elements
+            Element NumericParameter3 = doc.createElement("ns1:NumericParameter");
+            TriggerCount1.appendChild(NumericParameter3);
+
+            Attr NumericParameter31 = doc.createAttribute("value");
+            NumericParameter31.setValue("100");
+            NumericParameter3.setAttributeNode(NumericParameter31);
 
             // IRASO TURINI I XML FAILA
 
@@ -884,7 +972,7 @@ class XmlGenerator {
 
             transformer.transform(source, result);
 
-            System.out.println("File saved on desktop!");
+            System.out.println("BPSimData File saved on desktop!");
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
@@ -893,6 +981,157 @@ class XmlGenerator {
         }
     }
 
+}
+
+class CreateParticipantFile {
+    public static void generateParticipantXml() throws TransformerException, ParserConfigurationException {
+
+        ArrayList<ResourcesQuantity> resQ = ResourcesCalculation.getResourceCalculations();
+        int a = 0;
+
+
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+        Document doc = docBuilder.newDocument();
+        Element Participants = doc.createElement("Participants");
+        doc.appendChild(Participants);
+
+        Attr Participants1 = doc.createAttribute("xmlns:xsd");
+        Participants1.setValue("http://www.w3.org/2001/XMLSchema");
+        Participants.setAttributeNode(Participants1);
+
+        Attr Participants2 = doc.createAttribute("xmlns:xsi");
+        Participants2.setValue("http://www.w3.org/2001/XMLSchema-instance");
+        Participants.setAttributeNode(Participants2);
+
+        Attr Participants3 = doc.createAttribute("xmlns");
+        Participants3.setValue("http://www.wfmc.org/2009/XPDL2.2");
+        Participants.setAttributeNode(Participants3);
+
+
+        for (int i = 0; i < resQ.size(); i++) {
+
+            // ElementParameters4 elements
+            Element Participant = doc.createElement("Participant");
+            Participants.appendChild(Participant);
+
+            Attr Participant1 = doc.createAttribute("Id");
+            Participant1.setValue("8d0bd9c6-d0ca-4bc2-8fa8-ae6c9d76b52" + a);
+            Participant.setAttributeNode(Participant1);
+
+            Attr Participant2 = doc.createAttribute("Name");
+            Participant2.setValue(resQ.get(i).resourceName);
+            Participant.setAttributeNode(Participant2);
+
+
+            Element ParticipantType = doc.createElement("ParticipantType");
+            Participant.appendChild(ParticipantType);
+
+            Attr ParticipantType1 = doc.createAttribute("Type");
+            ParticipantType1.setValue("ROLE");
+            ParticipantType.setAttributeNode(ParticipantType1);
+
+            Element Description = doc.createElement("Description");
+            Participant.appendChild(Description);
+
+            Element ExtendedAttributes = doc.createElement("ExtendedAttributes");
+            Participant.appendChild(ExtendedAttributes);
+
+
+            Element ExtendedAttribute = doc.createElement("ExtendedAttribute");
+            ExtendedAttributes.appendChild(ExtendedAttribute);
+
+
+            Attr ExtendedAttribute1 = doc.createAttribute("Name");
+            ExtendedAttribute1.setValue(resQ.get(i).resourceName);
+            ExtendedAttribute.setAttributeNode(ExtendedAttribute1);
+            a++;
+        }
+
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new File("C:\\Users\\Justelio\\Desktop\\Participant-new.xml"));
+
+        transformer.transform(source, result);
+
+        System.out.println("Participant File saved on desktop!");
+
+
+    }
+}
+
+class CreateDiagramFile {
+
+    public static void generateDiagramXml() throws IOException, SAXException, ParserConfigurationException, TransformerException {
+        ArrayList<ResourcesQuantity> resQ = ResourcesCalculation.getResourceCalculations();
+        int a = 0;
+
+
+        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+        domFactory.setIgnoringComments(true);
+        DocumentBuilder builder = domFactory.newDocumentBuilder();
+        Document doc = builder.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair-05-17d. without simulation\\Repair-05-17d without simulation\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
+
+        NodeList nodes = doc.getElementsByTagName("Pools");
+
+
+        Element Participants = doc.createElement("Participants");
+        doc.appendChild(Participants);
+
+
+        for (int i = 0; i < resQ.size(); i++) {
+
+            // ElementParameters4 elements
+            Element Participant = doc.createElement("Participant");
+            Participants.appendChild(Participant);
+
+            Attr Participant1 = doc.createAttribute("Id");
+            Participant1.setValue("8d0bd9c6-d0ca-4bc2-8fa8-ae6c9d76b52" + a);
+            Participant.setAttributeNode(Participant1);
+
+            Attr Participant2 = doc.createAttribute("Name");
+            Participant2.setValue(resQ.get(i).resourceName);
+            Participant.setAttributeNode(Participant2);
+
+
+            Element ParticipantType = doc.createElement("ParticipantType");
+            Participant.appendChild(ParticipantType);
+
+            Attr ParticipantType1 = doc.createAttribute("Type");
+            ParticipantType1.setValue("ROLE");
+            ParticipantType.setAttributeNode(ParticipantType1);
+
+            Element Description = doc.createElement("Description");
+            Participant.appendChild(Description);
+
+            Element ExtendedAttributes = doc.createElement("ExtendedAttributes");
+            Participant.appendChild(ExtendedAttributes);
+
+
+            Element ExtendedAttribute = doc.createElement("ExtendedAttribute");
+            ExtendedAttributes.appendChild(ExtendedAttribute);
+
+
+            Attr ExtendedAttribute1 = doc.createAttribute("Name");
+            ExtendedAttribute1.setValue(resQ.get(i).resourceName);
+            ExtendedAttribute.setAttributeNode(ExtendedAttribute1);
+            a++;
+        }
+
+        nodes.item(0).getParentNode().insertBefore(Participants,nodes.item(0));
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(new File("C:\\Users\\Justelio\\Desktop\\Diagram-new.xml"));
+
+        transformer.transform(source, result);
+        System.out.println("Diagram File saved on desktop!");
+
+    }
 }
 
 
