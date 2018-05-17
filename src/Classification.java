@@ -183,7 +183,7 @@ class Duration {
         NodeList nodeList = document.getElementsByTagName("trace");
 
 
-        //ciklo pradzia
+        //Cicle start
         for (int k = 0; k < nodeList.getLength(); k++) {
             eventName.clear();
             time.clear();
@@ -331,7 +331,7 @@ class ActivityAttributes {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair-05-17d. without simulation\\Repair-05-17d without simulation\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair05-18d\\Naujas\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -441,7 +441,7 @@ class AllProbabilities {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair-05-17d. without simulation\\Repair-05-17d without simulation\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair05-18d\\Naujas\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -467,7 +467,6 @@ class AllProbabilities {
             }
 
         }
-
 
         loop:
         for (int x = 0, size = activityList.getLength(); x < size; x++) {
@@ -644,10 +643,6 @@ class AllProbabilities {
         System.out.println(hs);
 
         return probs; //grazina transitionId ir tikimybe
-    }
-
-    public String getStartEventId() {
-        return startEventId;
     }
 }
 
@@ -1073,7 +1068,7 @@ class CreateDiagramFile {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setIgnoringComments(true);
         DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document doc = builder.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair-05-17d. without simulation\\Repair-05-17d without simulation\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
+        Document doc = builder.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair05-18d\\Naujas\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
 
         NodeList nodes = doc.getElementsByTagName("Pools");
 
