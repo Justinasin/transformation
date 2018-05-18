@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.*;
 import java.util.*;
 
@@ -653,14 +654,19 @@ class ArrivingInterval {
 
     public static int getArrivingInterval() throws ParseException {
 
-        int arriving;
+        int arriving = 0;
+        int difference;
         int differenceCount = 0;
         int differenceSum = 0;
+        int allArrivals = 0;
+        int finalArrival;
         String childNodeName;
         boolean dateFound = false;
         String date = "";
         int arrivingInt;
         ArrayList<Integer> minutes = new ArrayList<>();
+        ArrayList<Integer> dates = new ArrayList<>();
+        ArrayList<Integer> uniqueDates = new ArrayList<>();
 
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -705,10 +711,7 @@ class ArrivingInterval {
                                 Date data;
                                 data = str.parse(date);
 
-                                if (data.getDate() == 2) {
-                                    arrivingInt = data.getHours() * 60 + data.getMinutes();
-                                    minutes.add(arrivingInt);
-                                }
+                                dates.add(data.getDate());
                             }
                         }
                     }
@@ -716,21 +719,74 @@ class ArrivingInterval {
             }
         }
 
-        Collections.sort(minutes); // sorting time from smallest to largest
-        for (int i = 1; i < minutes.size(); i++) {
-
-            int difference = minutes.get(i) - minutes.get(i - 1); // getting difference between beggining time
-            differenceSum += difference; // summing all differences
-            differenceCount++; // counting difference quantity
-
+// getting unique days (1,2,3,4...)
+        for (int i = 0; i < dates.size(); i++) {
+            int cuttentDate = dates.get(i);
+            if (!uniqueDates.contains(cuttentDate)) {
+                uniqueDates.add(cuttentDate);
+            }
         }
-        arriving = differenceSum / differenceCount;
+        Collections.sort(uniqueDates); // sorting days from lowest to highest
 
-        System.out.println("Visos register minutes:" + arriving);
-        return arriving;
+        for (int a = 0; a < uniqueDates.size(); a++) {
+            minutes.clear();
+            difference = 0;
+            differenceSum = 0;
+            differenceCount = 0;
+            for (int i = 0; i < eventList.getLength(); i++) {
+
+                dateFound = false;
+                NodeList childList = eventList.item(i).getChildNodes();
+
+                for (int j = 0; j < childList.getLength(); j++) {
+
+                    Node childNode = childList.item(j);
+                    childNodeName = childNode.getNodeName();
+
+                    if ("date".equals(childNodeName)) {
+                        date = childNode.getAttributes().getNamedItem("value").getNodeValue();
+                        dateFound = true;
+                    }
+
+                    if (dateFound) {
+
+                        if ("string".equals(childNodeName)) {
+
+                            if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+
+                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("Register")) {
+                                    SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS");
+                                    Date data;
+                                    data = str.parse(date);
+
+
+                                    if (data.getDate() == uniqueDates.get(a)) {
+                                        arrivingInt = data.getHours() * 60 + data.getMinutes();
+                                        minutes.add(arrivingInt);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Collections.sort(minutes); // sorting time from smallest to largest
+            for (int i = 1; i < minutes.size(); i++) {
+
+                difference = minutes.get(i) - minutes.get(i - 1); // getting difference between beggining time
+                differenceSum += difference; // summing all differences
+                differenceCount++; // counting difference quantity
+
+            }
+            arriving = differenceSum / differenceCount;
+            allArrivals += arriving;
+        }
+        finalArrival = allArrivals / uniqueDates.size(); // getting average arrival size
+
+        return finalArrival; // return average arrival size
 
     }
-
 }
 
 class XmlGenerator {

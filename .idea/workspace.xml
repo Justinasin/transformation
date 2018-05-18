@@ -11,7 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/Transformation$Classification.ic" NAME="Classification Coverage Results" MODIFIED="1526117052101" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/Transformation$Classification.ic" NAME="Classification Coverage Results" MODIFIED="1526628762180" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="Cvs2Configuration">
     <option name="OVERRIDE_EXISTING_TAG_FOR_PROJECT" value="false" />
@@ -21,8 +21,8 @@
       <file leaf-file-name="Classification.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Classification.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="208">
-              <caret line="709" column="61" lean-forward="true" selection-start-line="709" selection-start-column="61" selection-end-line="709" selection-end-column="61" />
+            <state relative-caret-position="345">
+              <caret line="786" column="42" selection-start-line="786" selection-start-column="42" selection-end-line="786" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -43,7 +43,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>float transitionProbability = transitionCounts.get(s)/totalTransitionCount;</find>
       <find>resource</find>
       <find>resourceParame</find>
       <find>encoding</find>
@@ -73,6 +72,7 @@
       <find>childnode</find>
       <find>childNodeName</find>
       <find>duration</find>
+      <find>unique</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -252,6 +252,7 @@
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3290938" />
       <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49926794" visible="true" weight="0.34750265" />
+      <window_info anchor="right" id="Coverage" order="4" side_tool="true" weight="0.32916668" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -263,7 +264,6 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49895832" weight="0.39213604" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Coverage" order="4" side_tool="true" weight="0.329429" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" x="0" y="0" width="434" height="856" id="Documentation" order="4" side_tool="true" weight="0.3296875" />
@@ -312,7 +312,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="268" />
+      <option name="time" value="270" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -726,8 +726,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Classification.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="709" column="61" lean-forward="true" selection-start-line="709" selection-start-column="61" selection-end-line="709" selection-end-column="61" />
+        <state relative-caret-position="345">
+          <caret line="786" column="42" selection-start-line="786" selection-start-column="42" selection-end-line="786" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
