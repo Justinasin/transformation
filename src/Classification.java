@@ -36,6 +36,9 @@ public class Classification {
         Duration dur = new Duration();
         dur.getDurations();
 
+        ArrivingInterval arr = new ArrivingInterval();
+        arr.getArrivingInterval();
+
         XmlGenerator xml = new XmlGenerator();
         xml.generateXml();
 
@@ -385,7 +388,7 @@ class ActivityAttributes {
                     Node childNode = childList.item(j); // VIENAS VAIKAS
                     childNodeName = childNode.getNodeName();
                     if ("string".equals(childNodeName)) {
-                        if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("org:resource")) { //klaida
+                        if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("org:resource")) {
                             resourceNameOfNode = childNode.getAttributes().getNamedItem("value").getNodeValue();
 
                         }
@@ -646,6 +649,89 @@ class AllProbabilities {
     }
 }
 
+class ArrivingInterval {
+
+    public static int getArrivingInterval() throws ParseException {
+
+        int arriving;
+        int differenceCount = 0;
+        int differenceSum = 0;
+        String childNodeName;
+        boolean dateFound = false;
+        String date = "";
+        int arrivingInt;
+        ArrayList<Integer> minutes = new ArrayList<>();
+
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document document = null;
+        try {
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\repairExample.xes"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        NodeList eventList = document.getElementsByTagName("event");
+
+        for (int i = 0; i < eventList.getLength(); i++) {
+            dateFound = false;
+            NodeList childList = eventList.item(i).getChildNodes();
+            for (int j = 0; j < childList.getLength(); j++) {
+
+                Node childNode = childList.item(j);
+                childNodeName = childNode.getNodeName();
+
+                if ("date".equals(childNodeName)) {
+                    date = childNode.getAttributes().getNamedItem("value").getNodeValue();
+                    dateFound = true;
+                }
+
+                if (dateFound) {
+
+                    if ("string".equals(childNodeName)) {
+
+                        if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+
+                            if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("Register")) {
+                                SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS");
+                                Date data;
+                                data = str.parse(date);
+
+                                if (data.getDate() == 2) {
+                                    arrivingInt = data.getHours() * 60 + data.getMinutes();
+                                    minutes.add(arrivingInt);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Collections.sort(minutes); // sorting time from smallest to largest
+        for (int i = 1; i < minutes.size(); i++) {
+
+            int difference = minutes.get(i) - minutes.get(i - 1); // getting difference between beggining time
+            differenceSum += difference; // summing all differences
+            differenceCount++; // counting difference quantity
+
+        }
+        arriving = differenceSum / differenceCount;
+
+        System.out.println("Visos register minutes:" + arriving);
+        return arriving;
+
+    }
+
+}
 
 class XmlGenerator {
 
@@ -940,7 +1026,7 @@ class XmlGenerator {
             InterTriggerTimer1.appendChild(NumericParameter2);
 
             Attr NumericParameter21 = doc.createAttribute("value");
-            NumericParameter21.setValue("20");
+            NumericParameter21.setValue(Integer.toString(ArrivingInterval.getArrivingInterval()));
             NumericParameter2.setAttributeNode(NumericParameter21);
 
             Element TriggerCount1 = doc.createElement("ns1:TriggerCount");
@@ -955,7 +1041,7 @@ class XmlGenerator {
             TriggerCount1.appendChild(NumericParameter3);
 
             Attr NumericParameter31 = doc.createAttribute("value");
-            NumericParameter31.setValue("100");
+            NumericParameter31.setValue("1104");
             NumericParameter3.setAttributeNode(NumericParameter31);
 
             // IRASO TURINI I XML FAILA
@@ -1116,7 +1202,7 @@ class CreateDiagramFile {
             a++;
         }
 
-        nodes.item(0).getParentNode().insertBefore(Participants,nodes.item(0));
+        nodes.item(0).getParentNode().insertBefore(Participants, nodes.item(0));
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -1128,6 +1214,8 @@ class CreateDiagramFile {
 
     }
 }
+
+
 
 
 
