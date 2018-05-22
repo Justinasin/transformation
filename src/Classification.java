@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.*;
 import java.util.*;
 
@@ -70,7 +69,7 @@ class Resources {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\repairExample.xes"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -106,7 +105,7 @@ class ResourcesCalculation {
         Iterator<String> resIter2 = resursai.iterator();
 
         int fullDistance = 0;
-        int counter = 0;
+        int counter = 1;
         while (resIter.hasNext()) {
             String dabartinisRes = resIter.next();
             counter++;
@@ -125,7 +124,7 @@ class ResourcesCalculation {
             boolean pridetas = false;
             while (keys.hasNext()) {
                 String key = keys.next();
-                if (LevenshteinDistance.getDefaultInstance().apply(key, dabartinisRes) < averageDistance) {
+                if (LevenshteinDistance.getDefaultInstance().apply(key, dabartinisRes) < 2) {
                     similarRes.put(key, similarRes.get(key) + 1); // resursai isgauti pagal levenšteino atstuma
                     pridetas = true;
                 }
@@ -160,6 +159,7 @@ class Duration {
     public static ArrayList<String> time = new ArrayList<>();
     public static ArrayList<String> status = new ArrayList<>();
     public static ArrayList<Integer> minutes = new ArrayList<>();
+    public static ArrayList<Integer> seconds = new ArrayList<>(); // NAUJAS
 
     public static ArrayList<ActivityProperties> getDurations() throws ParseException {
 
@@ -173,14 +173,14 @@ class Duration {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\repairExample.xes"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        HashMap<String, Integer> veikliuTrukmiuSumos = new HashMap<>(); //veiklu trukmiu sumos
+        HashMap<String, Double> veikliuTrukmiuSumos = new HashMap<>(); //veiklu trukmiu sumos
         HashMap<String, Integer> veikluVyksmuKiekiai = new HashMap<>(); //veiklu kiekiai
         ArrayList<String> uniqueEvents = new ArrayList<>();
 
@@ -238,7 +238,8 @@ class Duration {
             for (int i = 0; i < time.size(); i++) {
 
                 data = str.parse(time.get(i));
-                minutes.add(data.getHours() * 60 + data.getMinutes());
+                minutes.add((int)Math.ceil(data.getHours() * 60.0 + data.getMinutes()+ data.getSeconds()/60.0));
+                seconds.add(data.getSeconds());
             }
 
             //--- Get all lifecycle transitions of events ---//
@@ -257,7 +258,7 @@ class Duration {
 
                 String ivykisI = eventName.get(i); //gauname k-taji ivykio pavadinima
                 if (!veikliuTrukmiuSumos.containsKey(ivykisI)) {
-                    veikliuTrukmiuSumos.put(ivykisI, 0);
+                    veikliuTrukmiuSumos.put(ivykisI, 0.); // NAUJAS
                 }
                 if (!veikluVyksmuKiekiai.containsKey(ivykisI)) {
                     veikluVyksmuKiekiai.put(ivykisI, 1);
@@ -266,14 +267,19 @@ class Duration {
                 }
 
                 int duration = 0;
+                int durationInSec = 0;
                 for (int j = i + 1; j < eventName.size(); j++) {
                     if (ivykisI.equals(eventName.get(j)) && status.get(i).equals("start") && status.get(j).equals("complete")) {
 
 
                         duration = minutes.get(j) - minutes.get(i);
-                        if (duration >= 0) {
+                        durationInSec = seconds.get(j) - seconds.get(i);
+                        if (duration >= 1) { //NAUJAS
                             veikliuTrukmiuSumos.put(ivykisI, veikliuTrukmiuSumos.get(ivykisI) + duration);
                         }
+                        else{
+                            veikliuTrukmiuSumos.put(ivykisI, (double) (veikliuTrukmiuSumos.get(ivykisI) + durationInSec/60.0));
+                        } // NAUJAS
 
                         break;
                     }
@@ -292,7 +298,7 @@ class Duration {
         Iterator<String> ivykiuVardai = veikluVyksmuKiekiai.keySet().iterator();
         while (ivykiuVardai.hasNext()) {
             String ivykioVardas = ivykiuVardai.next();
-            veikluVidutinesTrukmes.put(ivykioVardas, veikliuTrukmiuSumos.get(ivykioVardas) / veikluVyksmuKiekiai.get(ivykioVardas) * 2);
+            veikluVidutinesTrukmes.put(ivykioVardas, (int) Math.ceil(veikliuTrukmiuSumos.get(ivykioVardas) / veikluVyksmuKiekiai.get(ivykioVardas) * 2));
         }
 
 
@@ -335,7 +341,7 @@ class ActivityAttributes {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair05-18d\\Naujas\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\Claim 05-18\\86a3a48a-379f-4403-8235-e2f3c2001fb7\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -352,7 +358,7 @@ class ActivityAttributes {
         }
         Document document1 = null;
         try {
-            document1 = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\repairExample.xes"));
+            document1 = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -445,7 +451,7 @@ class AllProbabilities {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair05-18d\\Naujas\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\Claim 05-18\\86a3a48a-379f-4403-8235-e2f3c2001fb7\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -472,6 +478,7 @@ class AllProbabilities {
 
         }
 
+        // searching for the first event (initiation)
         loop:
         for (int x = 0, size = activityList.getLength(); x < size; x++) {
 
@@ -483,6 +490,7 @@ class AllProbabilities {
             }
 
         }
+        // found the first event (initiation)
 
 
         DocumentBuilderFactory dbf1 = DocumentBuilderFactory.newInstance();
@@ -495,7 +503,7 @@ class AllProbabilities {
         }
         Document document1 = null;
         try {
-            document1 = db1.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\repairExample.xes"));
+            document1 = db1.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -659,7 +667,7 @@ class ArrivingInterval {
         int differenceCount = 0;
         int differenceSum = 0;
         int allArrivals = 0;
-        int finalArrival;
+        int finalArrival = 0;
         String childNodeName;
         boolean dateFound = false;
         String date = "";
@@ -678,7 +686,7 @@ class ArrivingInterval {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\repairExample.xes"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -706,12 +714,13 @@ class ArrivingInterval {
 
                         if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
 
-                            if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("Register")) {
-                                SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS");
+                            if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("incoming claim")) { // added first event from bussiness process model "Incoming claim". When it will be used with
+                                SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS"); // another bussiness process, need to change the name
                                 Date data;
                                 data = str.parse(date);
 
                                 dates.add(data.getDate());
+
                             }
                         }
                     }
@@ -754,7 +763,7 @@ class ArrivingInterval {
 
                             if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
 
-                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("Register")) {
+                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("incoming claim")) { // need to change the name of the first event
                                     SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS");
                                     Date data;
                                     data = str.parse(date);
@@ -782,7 +791,7 @@ class ArrivingInterval {
             arriving = differenceSum / differenceCount;
             allArrivals += arriving;
         }
-        finalArrival = allArrivals / uniqueDates.size(); // getting average arrival size
+     finalArrival = allArrivals / uniqueDates.size(); // getting average arrival size
 
         return finalArrival; // return average arrival size
 
@@ -849,14 +858,6 @@ class XmlGenerator {
             Element ScenarioParameters = doc.createElement("ns1:ScenarioParameters");
             Scenario.appendChild(ScenarioParameters);
 
-
-            /*// Duration elements
-            Element Duration = doc.createElement("ns1:Duration");
-            ScenarioParameters.appendChild(Duration);
-
-            // DurationParameter elements
-            Element DurationParameter = doc.createElement("ns1:DurationParameter");
-            Duration.appendChild(DurationParameter);*/
 
             // PropertyParameters1 elements
             Element PropertyParameters1 = doc.createElement("ns1:PropertyParameters");
@@ -1105,7 +1106,7 @@ class XmlGenerator {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("C:\\Users\\Justelio\\Desktop\\file.xml"));
+            StreamResult result = new StreamResult(new File("C:\\Users\\Justelio\\Desktop\\SimulationData\\BPSimData-new.xml"));
 
             transformer.transform(source, result);
 
@@ -1190,7 +1191,7 @@ class CreateParticipantFile {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File("C:\\Users\\Justelio\\Desktop\\Participant-new.xml"));
+        StreamResult result = new StreamResult(new File("C:\\Users\\Justelio\\Desktop\\SimulationData\\Participant-new.xml"));
 
         transformer.transform(source, result);
 
@@ -1210,7 +1211,7 @@ class CreateDiagramFile {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setIgnoringComments(true);
         DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document doc = builder.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Repair05-18d\\Naujas\\3186f63f-5190-49d1-b953-51705910d3c0\\Diagram.xml"));
+        Document doc = builder.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\Claim 05-18\\86a3a48a-379f-4403-8235-e2f3c2001fb7\\Diagram.xml"));
 
         NodeList nodes = doc.getElementsByTagName("Pools");
 
@@ -1263,7 +1264,7 @@ class CreateDiagramFile {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File("C:\\Users\\Justelio\\Desktop\\Diagram-new.xml"));
+        StreamResult result = new StreamResult(new File("C:\\Users\\Justelio\\Desktop\\SimulationData\\Diagram-new.xml"));
 
         transformer.transform(source, result);
         System.out.println("Diagram File saved on desktop!");
