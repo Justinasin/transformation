@@ -69,7 +69,7 @@ class Resources {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\loan.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -173,7 +173,7 @@ class Duration {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\loan.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -269,20 +269,24 @@ class Duration {
                 int duration = 0;
                 int durationInSec = 0;
                 for (int j = i + 1; j < eventName.size(); j++) {
-                    if (ivykisI.equals(eventName.get(j)) && status.get(i).equals("start") && status.get(j).equals("complete")) {
+                    if(status.size() > 0) {
+                        if (ivykisI.equals(eventName.get(j)) && status.get(i).equals("start") && status.get(j).equals("complete")) {
 
 
-                        duration = minutes.get(j) - minutes.get(i);
-                        durationInSec = seconds.get(j) - seconds.get(i);
-                        if (duration >= 1) { //NAUJAS
-                            veikliuTrukmiuSumos.put(ivykisI, veikliuTrukmiuSumos.get(ivykisI) + duration);
+                            duration = minutes.get(j) - minutes.get(i);
+                            durationInSec = seconds.get(j) - seconds.get(i);
+                            if (duration >= 1) { //NAUJAS
+                                veikliuTrukmiuSumos.put(ivykisI, veikliuTrukmiuSumos.get(ivykisI) + duration);
+                            } else {
+                                veikliuTrukmiuSumos.put(ivykisI, (double) (veikliuTrukmiuSumos.get(ivykisI) + durationInSec / 60.0));
+                            } // NAUJAS
+
+                            break;
                         }
-                        else{
-                            veikliuTrukmiuSumos.put(ivykisI, (double) (veikliuTrukmiuSumos.get(ivykisI) + durationInSec/60.0));
-                        } // NAUJAS
-
-                        break;
                     }
+                    else { // NAUJAS
+                        veikliuTrukmiuSumos.put(ivykisI, veikliuTrukmiuSumos.get(ivykisI) + duration); // NAUJAS
+                    } // NAUJAS
                 }
 
             }
@@ -341,7 +345,7 @@ class ActivityAttributes {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\Claim 05-18\\86a3a48a-379f-4403-8235-e2f3c2001fb7\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\LoanProcess\\202a6aa8-31f7-419e-8c07-15a5048cb0b5\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -358,7 +362,7 @@ class ActivityAttributes {
         }
         Document document1 = null;
         try {
-            document1 = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
+            document1 = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\loan.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -451,7 +455,7 @@ class AllProbabilities {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\Claim 05-18\\86a3a48a-379f-4403-8235-e2f3c2001fb7\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\LoanProcess\\202a6aa8-31f7-419e-8c07-15a5048cb0b5\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -503,13 +507,14 @@ class AllProbabilities {
         }
         Document document1 = null;
         try {
-            document1 = db1.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
+            document1 = db1.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\loan.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         NodeList traceList = document1.getElementsByTagName("trace");
+        System.out.println(traceList.getLength());
 
         HashMap<String, Float> transitionProbabilities = new HashMap<>();
         for (int a = 0; a < decisions.size(); a++) {
@@ -686,7 +691,7 @@ class ArrivingInterval {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
+            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\loan.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -714,7 +719,7 @@ class ArrivingInterval {
 
                         if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
 
-                            if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("incoming claim")) { // added first event from bussiness process model "Incoming claim". When it will be used with
+                            if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("register application")) { // added first event from bussiness process model "Incoming claim". When it will be used with
                                 SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS"); // another bussiness process, need to change the name
                                 Date data;
                                 data = str.parse(date);
@@ -763,7 +768,7 @@ class ArrivingInterval {
 
                             if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
 
-                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("incoming claim")) { // need to change the name of the first event
+                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("register application")) { // need to change the name of the first event
                                     SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS");
                                     Date data;
                                     data = str.parse(date);
@@ -791,7 +796,8 @@ class ArrivingInterval {
             arriving = differenceSum / differenceCount;
             allArrivals += arriving;
         }
-     finalArrival = allArrivals / uniqueDates.size(); // getting average arrival size
+     /*finalArrival = allArrivals / uniqueDates.size(); // getting average arrival size*/
+     finalArrival = 0; // NAUJAS
 
         return finalArrival; // return average arrival size
 
@@ -1211,7 +1217,7 @@ class CreateDiagramFile {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setIgnoringComments(true);
         DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document doc = builder.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\Claim 05-18\\86a3a48a-379f-4403-8235-e2f3c2001fb7\\Diagram.xml"));
+        Document doc = builder.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\LoanProcess\\202a6aa8-31f7-419e-8c07-15a5048cb0b5\\Diagram.xml"));
 
         NodeList nodes = doc.getElementsByTagName("Pools");
 
