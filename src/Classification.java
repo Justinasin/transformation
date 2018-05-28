@@ -21,6 +21,9 @@ public class Classification {
 
     public static void main(String[] args) throws Exception {
 
+        WaitTime waitTime = new WaitTime();
+        waitTime.getWaitTime();
+
         Resources res = new Resources();
         res.getResources();
 
@@ -38,6 +41,11 @@ public class Classification {
 
         ArrivingInterval arr = new ArrivingInterval();
         arr.getArrivingInterval();
+
+        ProcessTime process = new ProcessTime();
+        process.getProcessTime();
+
+        // turi buti cia wait time
 
         XmlGenerator xml = new XmlGenerator();
         xml.generateXml();
@@ -69,7 +77,7 @@ class Resources {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\loan.xes"));
+            document = db.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -124,7 +132,7 @@ class ResourcesCalculation {
             boolean pridetas = false;
             while (keys.hasNext()) {
                 String key = keys.next();
-                if (LevenshteinDistance.getDefaultInstance().apply(key, dabartinisRes) < 2) {
+                if (LevenshteinDistance.getDefaultInstance().apply(key, dabartinisRes) < averageDistance) {
                     similarRes.put(key, similarRes.get(key) + 1); // resursai isgauti pagal levenšteino atstuma
                     pridetas = true;
                 }
@@ -173,7 +181,7 @@ class Duration {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\loan.xes"));
+            document = db.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -238,7 +246,7 @@ class Duration {
             for (int i = 0; i < time.size(); i++) {
 
                 data = str.parse(time.get(i));
-                minutes.add((int)Math.ceil(data.getHours() * 60.0 + data.getMinutes()+ data.getSeconds()/60.0));
+                minutes.add((int) Math.ceil(data.getHours() * 60.0 + data.getMinutes() + data.getSeconds() / 60.0));
                 seconds.add(data.getSeconds());
             }
 
@@ -269,7 +277,7 @@ class Duration {
                 int duration = 0;
                 int durationInSec = 0;
                 for (int j = i + 1; j < eventName.size(); j++) {
-                    if(status.size() > 0) {
+                    if (status.size() > 0) {
                         if (ivykisI.equals(eventName.get(j)) && status.get(i).equals("start") && status.get(j).equals("complete")) {
 
 
@@ -278,13 +286,12 @@ class Duration {
                             if (duration >= 1) { //NAUJAS
                                 veikliuTrukmiuSumos.put(ivykisI, veikliuTrukmiuSumos.get(ivykisI) + duration);
                             } else {
-                                veikliuTrukmiuSumos.put(ivykisI, (double) (veikliuTrukmiuSumos.get(ivykisI) + durationInSec / 60.0));
+                                veikliuTrukmiuSumos.put(ivykisI, (veikliuTrukmiuSumos.get(ivykisI) + durationInSec / 60.0));
                             } // NAUJAS
 
                             break;
                         }
-                    }
-                    else { // NAUJAS
+                    } else { // NAUJAS
                         veikliuTrukmiuSumos.put(ivykisI, veikliuTrukmiuSumos.get(ivykisI) + duration); // NAUJAS
                     } // NAUJAS
                 }
@@ -302,7 +309,7 @@ class Duration {
         Iterator<String> ivykiuVardai = veikluVyksmuKiekiai.keySet().iterator();
         while (ivykiuVardai.hasNext()) {
             String ivykioVardas = ivykiuVardai.next();
-            veikluVidutinesTrukmes.put(ivykioVardas, (int) Math.ceil(veikliuTrukmiuSumos.get(ivykioVardas) / veikluVyksmuKiekiai.get(ivykioVardas) * 2));
+            veikluVidutinesTrukmes.put(ivykioVardas, (int) Math.ceil(veikliuTrukmiuSumos.get(ivykioVardas) / ((veikluVyksmuKiekiai.get(ivykioVardas)) / 2)));
         }
 
 
@@ -345,7 +352,7 @@ class ActivityAttributes {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\LoanProcess\\202a6aa8-31f7-419e-8c07-15a5048cb0b5\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\Claim 05-18\\86a3a48a-379f-4403-8235-e2f3c2001fb7\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -362,7 +369,7 @@ class ActivityAttributes {
         }
         Document document1 = null;
         try {
-            document1 = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\loan.xes"));
+            document1 = db.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -455,7 +462,7 @@ class AllProbabilities {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\LoanProcess\\202a6aa8-31f7-419e-8c07-15a5048cb0b5\\Diagram.xml"));
+            document = db.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\Claim 05-18\\86a3a48a-379f-4403-8235-e2f3c2001fb7\\Diagram.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -507,7 +514,7 @@ class AllProbabilities {
         }
         Document document1 = null;
         try {
-            document1 = db1.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\loan.xes"));
+            document1 = db1.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -691,7 +698,7 @@ class ArrivingInterval {
         }
         Document document = null;
         try {
-            document = db.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\loan.xes"));
+            document = db.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -719,7 +726,7 @@ class ArrivingInterval {
 
                         if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
 
-                            if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("register application")) { // added first event from bussiness process model "Incoming claim". When it will be used with
+                            if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("incoming claim")) { // added first event from bussiness process model "Incoming claim". When it will be used with
                                 SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS"); // another bussiness process, need to change the name
                                 Date data;
                                 data = str.parse(date);
@@ -768,7 +775,7 @@ class ArrivingInterval {
 
                             if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
 
-                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("register application")) { // need to change the name of the first event
+                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("incoming claim")) { // need to change the name of the first event
                                     SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS");
                                     Date data;
                                     data = str.parse(date);
@@ -796,11 +803,319 @@ class ArrivingInterval {
             arriving = differenceSum / differenceCount;
             allArrivals += arriving;
         }
-     /*finalArrival = allArrivals / uniqueDates.size(); // getting average arrival size*/
-     finalArrival = 0; // NAUJAS
+        /*  finalArrival = allArrivals / uniqueDates.size();*/ // getting average arrival size
+        finalArrival = 0; // NAUJAS
 
         return finalArrival; // return average arrival size
 
+    }
+}
+
+class ProcessTime {
+    public static int getProcessTime() throws ParseException {
+
+        String date = "";
+        String childNodeName;
+        boolean dateFound = false;
+        int beginTime = 0;
+        int endTime = 0;
+        int beginDay = 0;
+        int endDay = 0;
+        int difference;
+        int differenceSum = 0;
+        int differenceCount = 0;
+        int processTime;
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document document = null;
+        try {
+            document = db.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        NodeList traceList = document.getElementsByTagName("trace");
+
+        loop:
+        for (int k = 0; k < traceList.getLength(); k++) {
+
+            boolean beginDateFound = false;
+            boolean endDateFound = false;
+
+            Element trace = (Element) traceList.item(k);
+            NodeList eventList = trace.getElementsByTagName("event");
+
+            for (int i = 0; i < eventList.getLength(); i++) { // LOOP START
+
+
+                dateFound = false;
+                NodeList childList = eventList.item(i).getChildNodes();
+                for (int j = 0; j < childList.getLength(); j++) {
+
+                    Node childNode = childList.item(j);
+                    childNodeName = childNode.getNodeName();
+
+                    if ("date".equals(childNodeName)) {
+                        date = childNode.getAttributes().getNamedItem("value").getNodeValue();
+                        dateFound = true;
+                    }
+
+                    if (dateFound) {
+
+                        if ("string".equals(childNodeName)) {
+
+                            if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+
+                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("incoming claim")) { // added first event from bussiness process model "Incoming claim". When it will be used with
+                                    SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS"); // another bussiness process, need to change the name
+                                    Date data;
+                                    data = str.parse(date);
+                                    beginTime = data.getHours() * 60 + data.getMinutes();
+                                    beginDay = data.getDay();
+                                    beginDateFound = true;
+
+
+                                }
+                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("end")) { // added first event from bussiness process model "Incoming claim". When it will be used with
+                                    SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS"); // another bussiness process, need to change the name
+                                    Date data;
+                                    data = str.parse(date);
+                                    endTime = data.getHours() * 60 + data.getMinutes();
+                                    endDay = data.getDay();
+                                    endDateFound = true;
+                                }
+                                if (beginDateFound == true && endDateFound == true && beginDay == endDay) {
+
+                                    difference = (endTime - beginTime); // getting difference between end and begin time
+                                    differenceSum += difference;
+                                    differenceCount++;// summing all differences
+                                    continue loop;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }// LOOP END
+
+        processTime = (differenceSum / differenceCount);
+        System.out.println(processTime);
+
+        return processTime;
+    }
+}
+
+/*class ProcessTime { // this class is used by loan.xes event log
+    public static int getProcessTime() throws ParseException {
+
+        String date = "";
+        String childNodeName;
+        boolean dateFound = false;
+        int beginTime = 0;
+        int endTime = 0;
+        int beginDay = 0;
+        int endDay = 0;
+        int difference;
+        int differenceSum = 0;
+        int differenceCount = 0;
+        int processTime;
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document document = null;
+        try {
+            document = db.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        NodeList traceList = document.getElementsByTagName("trace");
+
+
+        for (int k = 0; k < traceList.getLength(); k++) {
+
+            boolean beginDateFound = false;
+            boolean endDateFound = false;
+
+            Element trace = (Element) traceList.item(k);
+            NodeList eventList = trace.getElementsByTagName("event");
+
+            for (int i = 0; i < eventList.getLength(); i++) { // LOOP START
+
+
+                dateFound = false;
+                NodeList childList = eventList.item(i).getChildNodes();
+                for (int j = 0; j < childList.getLength(); j++) {
+
+                    Node childNode = childList.item(j);
+                    childNodeName = childNode.getNodeName();
+
+                    if ("string".equals(childNodeName)) {
+                        if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+                            if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("incoming claim")) {
+                                dateFound = true;
+                            }
+                        }
+                    }
+
+                    if (dateFound) {
+
+                        if ("string".equals(childNodeName)) {
+
+                            if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+
+                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("incoming claim")) { // added first event from bussiness process model "Incoming claim". When it will be used with
+                                    SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS"); // another bussiness process, need to change the name
+                                    Date data;
+                                    data = str.parse(date);
+                                    beginTime = data.getHours() * 60 + data.getMinutes();
+                                    beginDay = data.getDay();
+                                    beginDateFound = true;
+
+
+                                }
+                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("end")) { // added first event from bussiness process model "Incoming claim". When it will be used with
+                                    SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS"); // another bussiness process, need to change the name
+                                    Date data;
+                                    data = str.parse(date);
+                                    endTime = data.getHours() * 60 + data.getMinutes();
+                                    endDay = data.getDay();
+                                    endDateFound = true;
+                                }
+                                if (beginDateFound == true && endDateFound == true && beginDay == endDay) {
+
+                                    difference = (endTime - beginTime); // getting difference between end and begin time
+                                    differenceSum += difference;
+                                    differenceCount++;// summing all differences
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }// LOOP END
+
+        processTime = (differenceSum / differenceCount);
+        System.out.println(processTime);
+
+        return processTime;
+    }
+}*/
+
+
+class WaitTime {
+    public static int getWaitTime() throws ParseException {
+
+        String date = "";
+        String childNodeName;
+        boolean dateFound = false;
+        int beginTime = 0;
+        int endTime = 0;
+        int beginDay = 0;
+        int endDay = 0;
+        int difference;
+        int differenceSum = 0;
+        int differenceCount = 0;
+        int processTime;
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document document = null;
+        try {
+            document = db.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Event_logs\\Repair\\example-logs\\teleclaims.xes"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        NodeList traceList = document.getElementsByTagName("trace");
+
+        loop:
+        for (int k = 0; k < traceList.getLength(); k++) {
+
+            boolean beginDateFound = false;
+            boolean endDateFound = false;
+
+            Element trace = (Element) traceList.item(k);
+            NodeList eventList = trace.getElementsByTagName("event");
+
+
+            for (int i = 0; i < eventList.getLength(); i++) { // LOOP START
+
+
+                dateFound = false;
+                NodeList childList = eventList.item(i).getChildNodes();
+                for (int j = 0; j < childList.getLength(); j++) {
+
+                    Node childNode = childList.item(j);
+                    childNodeName = childNode.getNodeName();
+
+                    if ("date".equals(childNodeName)) {
+                        date = childNode.getAttributes().getNamedItem("value").getNodeValue();
+                        dateFound = true;
+                    }
+
+                    if (dateFound) {
+
+                        if ("string".equals(childNodeName)) {
+
+                            if (childNode.getAttributes().getNamedItem("key").getNodeValue().contains("concept:name")) {
+
+                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("assess claim")) { // added first event from bussiness process model "Incoming claim". When it will be used with
+                                    SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS"); // another bussiness process, need to change the name
+                                    Date data;
+                                    data = str.parse(date);
+                                    beginTime = data.getHours() * 60 + data.getMinutes();
+                                    beginDay = data.getDay();
+                                    beginDateFound = true;
+
+
+                                }
+                                if (childList.item(j).getAttributes().getNamedItem("value").getNodeValue().equals("advise claimant on reimbursement")) { // added first event from bussiness process model "Incoming claim". When it will be used with
+                                    SimpleDateFormat str = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'+'SS:SS"); // another bussiness process, need to change the name
+                                    Date data;
+                                    data = str.parse(date);
+                                    endTime = data.getHours() * 60 + data.getMinutes();
+                                    endDay = data.getDay();
+                                    endDateFound = true;
+                                }
+                                if (beginDateFound == true && endDateFound == true && beginDay == endDay) {
+
+                                    difference = (endTime - beginTime); // getting difference between end and begin time
+                                    differenceSum += difference;
+                                    differenceCount++;// summing all differences
+                                    continue loop;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }// LOOP END
+
+        processTime = (differenceSum / differenceCount);
+        System.out.println(processTime);
+
+        return processTime;
     }
 }
 
@@ -1217,7 +1532,7 @@ class CreateDiagramFile {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setIgnoringComments(true);
         DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document doc = builder.parse(new File("C:\\VGTU\\Magistaras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\LoanProcess\\202a6aa8-31f7-419e-8c07-15a5048cb0b5\\Diagram.xml"));
+        Document doc = builder.parse(new File("C:\\VGTU\\Magistras ISIfm-16\\MAGISTRINIS DARBAS\\III dalis\\Bizagi\\Claim\\Claim 05-18\\86a3a48a-379f-4403-8235-e2f3c2001fb7\\Diagram.xml"));
 
         NodeList nodes = doc.getElementsByTagName("Pools");
 
